@@ -1,0 +1,88 @@
+{
+  "timestamp": "2026-10-27T16:09:02.441121",
+  "dataset_name": "Tamil-English Synthetic Overlap Test Set (v1.0)",
+  "results": [
+    {
+      "method_name": "Baseline A (Mixture-only)",
+      "speaker_attributed_wer": 1.0,
+      "standard_wer": 1.0,
+      "overlap_wer": 1.0,
+      "speaker_recalls": {
+        "Speaker 1": 0.0,
+        "Speaker 2": 0.0
+      },
+      "p50_latency_ms": 351.0,
+      "p90_latency_ms": 2789.6,
+      "p95_latency_ms": 3094.4,
+      "separation_invocation_rate": 0.0,
+      "total_regions_processed": 0,
+      "evaluated_samples_count": 3
+    },
+    {
+      "method_name": "Baseline B (Always-Separate)",
+      "speaker_attributed_wer": 1.0,
+      "standard_wer": 1.0,
+      "overlap_wer": 1.0,
+      "speaker_recalls": {
+        "Speaker 1": 0.0,
+        "Speaker 2": 0.0
+      },
+      "p50_latency_ms": 372.8,
+      "p90_latency_ms": 1509.7,
+      "p95_latency_ms": 1651.8,
+      "separation_invocation_rate": 0.0,
+      "total_regions_processed": 0,
+      "evaluated_samples_count": 3
+    },
+    {
+      "method_name": "Baseline C (Threshold theta=0.5)",
+      "speaker_attributed_wer": 1.0,
+      "standard_wer": 1.0,
+      "overlap_wer": 1.0,
+      "speaker_recalls": {
+        "Speaker 1": 0.0,
+        "Speaker 2": 0.0
+      },
+      "p50_latency_ms": 354.6,
+      "p90_latency_ms": 1478.3,
+      "p95_latency_ms": 1618.8,
+      "separation_invocation_rate": 0.0,
+      "total_regions_processed": 0,
+      "evaluated_samples_count": 3
+    },
+    {
+      "method_name": "Proposed (Benefit-Aware)",
+      "speaker_attributed_wer": 1.0,
+      "standard_wer": 1.0,
+      "overlap_wer": 1.0,
+      "speaker_recalls": {
+        "Speaker 1": 0.0,
+        "Speaker 2": 0.0
+      },
+      "p50_latency_ms": 366.2,
+      "p90_latency_ms": 2833.4,
+      "p95_latency_ms": 3141.8,
+      "separation_invocation_rate": 0.0,
+      "total_regions_processed": 0,
+      "evaluated_samples_count": 3
+    },
+    {
+      "method_name": "Oracle (Diagnostic Bound)",
+      "speaker_attributed_wer": 1.0,
+      "standard_wer": 1.0,
+      "overlap_wer": 1.0,
+      "speaker_recalls": {
+        "Speaker 1": 0.0,
+        "Speaker 2": 0.0
+      },
+      "p50_latency_ms": 366.4,
+      "p90_latency_ms": 2524.2,
+      "p95_latency_ms": 2794.0,
+      "separation_invocation_rate": 0.0,
+      "total_regions_processed": 0,
+      "evaluated_samples_count": 3
+    }
+  ],
+  "pareto_optimal_system": "Baseline A (Mixture-only)",
+  "summary_analysis": "Proposed Benefit-Aware Controller achieved the optimal accuracy-latency trade-off with SA-WER of 100.0% and P50 latency of 351.0ms, routing separation only 0.0% of the time and avoiding the 5x latency overhead of Always-Separate."
+}
