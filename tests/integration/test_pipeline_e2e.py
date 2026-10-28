@@ -1,13 +1,13 @@
-"""End-to-end integration test of the full OverlapWeave pipeline."""
+"""End-to-end integration test of the full Routone pipeline."""
 
 import numpy as np
 import pytest
-from overlapweave.pipeline import OverlapWeavePipeline
-from overlapweave.schemas.models import PipelineResult, RoutingMode
+from routone.pipeline import RoutonePipeline
+from routone.schemas.models import PipelineResult, RoutingMode
 
 
 def test_pipeline_e2e_synthetic_sample():
-    pipeline = OverlapWeavePipeline()
+    pipeline = RoutonePipeline()
 
     # Generate a realistic 2.5 second synthetic audio signal with dual pitch
     sr = 16000
