@@ -1,4 +1,4 @@
-# OverlapWeave: System Architecture
+# Routone: System Architecture
 
 ## 1. Architectural Blueprint
 
@@ -77,7 +77,7 @@
 
 ## 2. Component Design Specifications
 
-### A. `overlapweave.audio`
+### A. `routone.audio`
 - **Module:** `audio.processor`
 - **Responsibilities:**
   - Ingest raw audio payload (WAV, MP3, FLAC, M4A, WebM).
@@ -86,21 +86,21 @@
   - Compute audio diagnostics: Duration (sec), RMS energy, Peak amplitude, Dynamic range, Signal-to-Noise Ratio (SNR) estimate.
   - Window extraction with symmetric padding for boundary protection.
 
-### B. `overlapweave.asr`
+### B. `routone.asr`
 - **Module:** `asr.whisper_engine`
 - **Responsibilities:**
   - Wrap `faster-whisper` with automatic hardware acceleration (`cpu`, `mps` if supported, int8 quantization for ultra-fast inference).
   - Produce normalized segments with start/end timestamps, text, detected language (`ta` / `en`), and word-level timing when enabled.
   - Calculate average token log-probability as a proxy for baseline recognition uncertainty.
 
-### C. `overlapweave.overlap`
+### C. `routone.overlap`
 - **Module:** `overlap.detector`
 - **Responsibilities:**
   - Frame-level feature extraction: Short-time energy variance, zero-crossing rate variance, multi-pitch harmonic clash indicator.
   - Multi-speaker overlap candidate region extraction with hysteresis thresholding and minimum duration merging ($\ge 0.3$s).
   - Produce intervals with start, end, overlap confidence $[0.0, 1.0]$, and estimated speaker count.
 
-### D. `overlapweave.separation`
+### D. `routone.separation`
 - **Module:** `separation.separator`
 - **Responsibilities:**
   - Wrap `torchaudio.pipelines.CONVTASNET_BASE_LIBRI2MIX`.
@@ -108,7 +108,7 @@
   - Windowed chunk processing with Hann/cosine overlap-add crossfade for long regions to avoid block boundary clicks.
   - Strict fallback: If separation encounters numerical instability or out-of-bounds energy, gracefully return baseline mixture stream.
 
-### E. `overlapweave.routing`
+### E. `routone.routing`
 - **Module:** `routing.controller`
 - **Responsibilities:**
   - Calculate acoustic and linguistic decision features:
@@ -120,7 +120,7 @@
     2. `BenefitAwareController` (Proposed): utility thresholding with cost awareness.
     3. `OracleController` (Diagnostic Upper Bound): retrospective oracle using ground-truth references.
 
-### F. `overlapweave.reconciliation`
+### F. `routone.reconciliation`
 - **Module:** `reconciliation.reconciler`
 - **Responsibilities:**
   - Align baseline transcript tokens with separated $S_A$ and $S_B$ tokens.
@@ -128,7 +128,7 @@
   - Tag each segment with speaker ID (`Speaker 1`, `Speaker 2`), confidence score, and processing provenance (`mixture` vs `separated_stream_a` vs `separated_stream_b`).
   - Strict anti-hallucination policy: No words inserted that lack acoustic backing.
 
-### G. `overlapweave.evaluation`
+### G. `routone.evaluation`
 - **Module:** `evaluation.metrics` & `evaluation.harness`
 - **Responsibilities:**
   - Compute Speaker-Attributed Word Error Rate (SA-WER), standard WER, Overlap-region WER (OV-WER), and Per-speaker recall.
