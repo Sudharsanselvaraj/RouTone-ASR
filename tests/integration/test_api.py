@@ -6,7 +6,7 @@ import pytest
 import soundfile as sf
 from starlette.testclient import TestClient
 
-from overlapweave.api.app import app
+from routone.api.app import app
 
 
 @pytest.fixture
@@ -108,8 +108,8 @@ def test_api_transcribe_rejects_bad_options(client):
 def test_api_transcribe_trace_config_and_persist(client, tmp_path, monkeypatch):
     import io, numpy as np, soundfile as sf
     import importlib
-    app_module = importlib.import_module("overlapweave.api.app")
-    from overlapweave.runs import RunStore
+    app_module = importlib.import_module("routone.api.app")
+    from routone.runs import RunStore
     monkeypatch.setattr(app_module, "run_store", RunStore(tmp_path))
     buf = io.BytesIO()
     sf.write(buf, (0.1 * np.sin(np.linspace(0, 400, 32000))).astype(np.float32), 16000, format="WAV")
