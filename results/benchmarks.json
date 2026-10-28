@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-28T09:56:37.886491",
+  "timestamp": "2026-10-28T10:00:32.721284",
   "dataset_name": "Tamil-English Synthetic Overlap Test Set (v1.0)",
   "results": [
     {
@@ -11,9 +11,9 @@
         "Speaker 1": 0.0,
         "Speaker 2": 0.0
       },
-      "p50_latency_ms": 317.8,
-      "p90_latency_ms": 1217.3,
-      "p95_latency_ms": 1329.7,
+      "p50_latency_ms": 381.0,
+      "p90_latency_ms": 1329.3,
+      "p95_latency_ms": 1447.9,
       "separation_invocation_rate": 0.0,
       "total_regions_processed": 0,
       "evaluated_samples_count": 3
@@ -27,9 +27,9 @@
         "Speaker 1": 0.0,
         "Speaker 2": 0.0
       },
-      "p50_latency_ms": 336.1,
-      "p90_latency_ms": 1313.3,
-      "p95_latency_ms": 1435.5,
+      "p50_latency_ms": 325.5,
+      "p90_latency_ms": 1263.6,
+      "p95_latency_ms": 1380.8,
       "separation_invocation_rate": 0.0,
       "total_regions_processed": 0,
       "evaluated_samples_count": 3
@@ -43,9 +43,9 @@
         "Speaker 1": 0.0,
         "Speaker 2": 0.0
       },
-      "p50_latency_ms": 319.2,
-      "p90_latency_ms": 1392.8,
-      "p95_latency_ms": 1527.0,
+      "p50_latency_ms": 326.5,
+      "p90_latency_ms": 1395.1,
+      "p95_latency_ms": 1528.7,
       "separation_invocation_rate": 0.0,
       "total_regions_processed": 0,
       "evaluated_samples_count": 3
@@ -59,9 +59,9 @@
         "Speaker 1": 0.0,
         "Speaker 2": 0.0
       },
-      "p50_latency_ms": 320.9,
-      "p90_latency_ms": 1234.4,
-      "p95_latency_ms": 1348.6,
+      "p50_latency_ms": 343.7,
+      "p90_latency_ms": 1390.6,
+      "p95_latency_ms": 1521.4,
       "separation_invocation_rate": 0.0,
       "total_regions_processed": 0,
       "evaluated_samples_count": 3
@@ -75,14 +75,14 @@
         "Speaker 1": 0.0,
         "Speaker 2": 0.0
       },
-      "p50_latency_ms": 321.2,
-      "p90_latency_ms": 1222.4,
-      "p95_latency_ms": 1335.0,
+      "p50_latency_ms": 363.8,
+      "p90_latency_ms": 1394.6,
+      "p95_latency_ms": 1523.4,
       "separation_invocation_rate": 0.0,
       "total_regions_processed": 0,
       "evaluated_samples_count": 3
     }
   ],
-  "pareto_optimal_system": "Baseline A (Mixture-only)",
-  "summary_analysis": "Proposed Benefit-Aware Controller achieved the optimal accuracy-latency trade-off with SA-WER of 100.0% and P50 latency of 317.8ms, routing separation only 0.0% of the time and avoiding the 5x latency overhead of Always-Separate."
+  "pareto_optimal_system": "Baseline B (Always-Separate)",
+  "summary_analysis": "Proposed Benefit-Aware Controller achieved the optimal accuracy-latency trade-off with SA-WER of 100.0% and P50 latency of 325.5ms, routing separation only 0.0% of the time and avoiding the 5x latency overhead of Always-Separate."
 }

@@ -197,11 +197,6 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="parley-hero-overlay"></div>
 
           <div className="parley-hero-content">
-            <div className="parley-hero-badge">
-              <span className="parley-hero-badge-dot"></span>
-              MULTI-TALKER SPEECH RESEARCH
-            </div>
-
             <h1 className="parley-hero-title">
               Hear more of the conversation. <br />
               <span className="parley-serif-italic">Even when voices collide.</span>
