@@ -37,7 +37,7 @@
 
   /* Type */
   --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+  --font-display: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace;
 
   /* Shape */
@@ -129,13 +129,14 @@ kbd {
 
 /* Typography */
 h1 {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(28px, 3.4vw, 40px);
-  line-height: 1.12;
-  letter-spacing: -0.015em;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(30px, 3.6vw, 48px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
-h1 em { font-style: italic; color: var(--accent-ink); }
+/* Emphasis is the same face in italic and a softer tone, as on the landing page. */
+h1 em { font-style: italic; font-weight: 400; color: var(--ink-3); }
 h2 { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; }
 .h-sm { font-size: 14px; font-weight: 600; }
 .h-xs {
