@@ -201,7 +201,10 @@ class SyntheticDatasetGenerator:
                 "Speaker 2": seed_meta["spk2_text"],
             },
             "lang_pair": seed_meta["lang_pair"],
-            "snr_db": seed_meta["snr_db"]
+            "snr_db": seed_meta["snr_db"],
+            # Harmonic-tone stand-ins for voices: they contain no words, so the reference text is NOT spoken.
+            "contains_speech": False,
+            "audio_source": "harmonic_tone_synthesis",
         }
 
     @classmethod
