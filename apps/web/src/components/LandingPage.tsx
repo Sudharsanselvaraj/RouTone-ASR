@@ -21,7 +21,7 @@ function useReveal() {
     if (!root) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const targets = [...root.querySelectorAll<HTMLElement>(
-      '.parley-section-header, .parley-cards-flex-row, .parley-workflow-showcase, .tech-marquee, .tech-note, .parley-metric-card, .parley-bench-cta-wrap, .parley-banner-content, .parley-footer-top',
+      '.parley-section-header, .parley-cards-flex-row, .parley-workflow-showcase, .tech-marquee, .parley-metric-card, .parley-bench-cta-wrap, .parley-banner-content, .parley-footer-top',
     )];
     if (reduce || !('IntersectionObserver' in window)) return;
     targets.forEach((t, i) => {
@@ -568,7 +568,6 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </p>
         </div>
         <TechMarquee />
-        <p className="tech-note">Hover a logo for its role. Items marked planned are on the roadmap and not yet wired in.</p>
       </section>
 
       {/* 6. EVALUATION — live state of the saved benchmark, never hardcoded numbers */}
