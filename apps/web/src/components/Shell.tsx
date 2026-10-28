@@ -14,6 +14,8 @@ const NAV: { id: Exclude<View, 'landing'>; label: string; icon: ReactNode }[] = 
   { id: 'benchmarks', label: 'Benchmarks', icon: <BarChart3 size={16} /> },
 ];
 
+const HOSTED = !['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
+
 export function Shell({ children }: { children: ReactNode }) {
   const wb = useWorkbench();
   const [menu, setMenu] = useState(false);
@@ -72,7 +74,16 @@ export function Shell({ children }: { children: ReactNode }) {
         {busy && <div className="progress-line" aria-hidden="true" />}
         {wb.backend === 'offline' && (
           <Banner tone="amber" title="Backend not reachable">
-            Routone can’t reach its API at the configured address, so nothing can be transcribed or evaluated. Start it with <code>make server</code>.
+            {HOSTED ? (
+              <>
+                This is the hosted interface; it has no server of its own. To transcribe or evaluate, run the API on your machine
+                (<code>make server</code>) and reload this page. It connects to <code>localhost:8000</code> from Chrome, Edge or Firefox.
+              </>
+            ) : (
+              <>
+                Routone can’t reach its API at the configured address, so nothing can be transcribed or evaluated. Start it with <code>make server</code>.
+              </>
+            )}
           </Banner>
         )}
         {wb.error && (
