@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Sudharsanselvaraj/RouTone-ASR/actions"><img alt="CI" src="https://github.com/Sudharsanselvaraj/RouTone-ASR/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://sudharsanselvaraj.github.io/RouTone-ASR/"><b>Live site</b></a> · <a href="https://github.com/Sudharsanselvaraj/RouTone-ASR/actions"><img alt="CI" src="https://github.com/Sudharsanselvaraj/RouTone-ASR/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="Python 3.11" src="https://img.shields.io/badge/python-3.11-blue.svg">
   <img alt="React 19" src="https://img.shields.io/badge/react-19-61dafb.svg">
   <img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache_2.0-green.svg">
@@ -40,6 +40,10 @@ Every value in the UI is labelled as *measured*, *estimate*, *heuristic* or *fix
 | **Overlap Inspector** | Multi-lane timeline, region evidence, mixture-vs-stream comparison, reconciliation audit |
 | **Adaptive Routing Lab** | Policy comparison on a recording, decision inspector, benefit-vs-cost chart, real pipeline trace |
 | **Benchmarks** | Strategy comparison, accuracy-vs-latency plot, integrity warnings, history |
+
+## Hosted interface
+
+The interface is published at https://sudharsanselvaraj.github.io/RouTone-ASR/. GitHub Pages serves static files only, so the Python backend (Whisper, ConvTasNet) is not hosted there. Run `make server` locally and the hosted page connects to it at `localhost:8000` (Chrome, Edge or Firefox).
 
 ## Quick start
 
