@@ -4,7 +4,7 @@
     {
       "name": "routone-api",
       "runtimeExecutable": ".venv/bin/uvicorn",
-      "runtimeArgs": ["overlapweave.api.app:app", "--host", "127.0.0.1", "--port", "8000"],
+      "runtimeArgs": ["routone.api.app:app", "--host", "127.0.0.1", "--port", "8000"],
       "port": 8000
     },
     {
