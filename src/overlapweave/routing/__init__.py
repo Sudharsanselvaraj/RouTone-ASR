@@ -8,7 +8,20 @@ from .controller import (
     OracleController,
 )
 
+from .policies import (
+    STRATEGIES,
+    AlwaysSeparateController,
+    NeverSeparateController,
+    build_controller,
+    replay_decisions,
+)
+
 __all__ = [
+    "STRATEGIES",
+    "AlwaysSeparateController",
+    "NeverSeparateController",
+    "build_controller",
+    "replay_decisions",
     "FeatureExtractor",
     "BaseController",
     "ThresholdController",
