@@ -3,14 +3,14 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "overlapweave"
+name = "routone"
 version = "0.1.0"
 description = "Benefit-Aware Adaptive Speech Separation for Speaker-Attributed ASR in Overlapping Tamil–English Conversations"
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "Apache-2.0"}
 authors = [
-    {name = "OverlapWeave Research Team"}
+    {name = "Routone Research Team"}
 ]
 dependencies = [
     "torch>=2.0.0",
