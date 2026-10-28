@@ -8,7 +8,7 @@ While speech separation techniques (e.g., Conv-TasNet, SepFormer) can demix over
 2. **Separation Artifacts & Degradation:** On single-speaker or high-SNR speech, separation algorithms introduce non-linear phase distortions and musical noise, which often degrade downstream ASR relative to the original unprocessed audio.
 3. **Threshold Myopia:** Simple overlap detection thresholds ignore downstream ASR difficulty. An overlap where the primary speaker is completely intelligible may not warrant costly separation, whereas an overlap with high acoustic confusion requires it.
 
-**OverlapWeave addresses this gap via:**
+**Routone addresses this gap via:**
 > *A region-level benefit-aware adaptive routing controller that predicts the expected accuracy improvement of speech separation against its latency cost, dynamically choosing whether to separate, keep the mixture, or flag for human review.*
 
 ---
@@ -42,7 +42,7 @@ While speech separation techniques (e.g., Conv-TasNet, SepFormer) can demix over
 
 ## 3. Comparison of Paradigms
 
-| Property | Mixture-Only Baseline | Always-Separate Baseline | Fixed Threshold OSD | OverlapWeave (Proposed) |
+| Property | Mixture-Only Baseline | Always-Separate Baseline | Fixed Threshold OSD | Routone (Proposed) |
 |---|---|---|---|---|
 | **Overlap Recovery** | Poor (omits secondary speaker) | High | Moderate | High |
 | **Clean Speech Degradation** | None (clean audio untouched) | Moderate (separation artifacts) | Low | None (routed to mixture) |
@@ -53,4 +53,4 @@ While speech separation techniques (e.g., Conv-TasNet, SepFormer) can demix over
 ---
 
 ## 4. Research Integrity & Novelty Statement
-OverlapWeave investigates an empirical hypothesis regarding the efficacy of benefit-aware routing. We do not claim global novelty for speech separation or ASR in isolation; rather, we contribute a rigorous, reproducible evaluation of whether an adaptive controller can achieve an optimal Pareto frontier between Speaker-Attributed Word Error Rate (SA-WER) and inference latency on overlapping Tamil–English conversational speech.
+Routone investigates an empirical hypothesis regarding the efficacy of benefit-aware routing. We do not claim global novelty for speech separation or ASR in isolation; rather, we contribute a rigorous, reproducible evaluation of whether an adaptive controller can achieve an optimal Pareto frontier between Speaker-Attributed Word Error Rate (SA-WER) and inference latency on overlapping Tamil–English conversational speech.
