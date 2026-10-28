@@ -1,3 +1,5 @@
+import { asset } from '../lib/assets';
+
 interface Tech {
   name: string;
   src: string;
@@ -30,7 +32,7 @@ function Row({ items, reverse }: { items: Tech[]; reverse?: boolean }) {
   const set = (hidden: boolean) =>
     items.map((t) => (
       <li className="tech-tile" key={`${t.name}${hidden}`} aria-hidden={hidden || undefined} tabIndex={hidden ? -1 : 0} title={`${t.name} · ${t.role} (${t.status})`}>
-        <img src={t.src} alt={hidden ? '' : t.name} className={t.wide ? 'is-wide' : ''} loading="lazy" draggable={false} />
+        <img src={asset(t.src)} alt={hidden ? '' : t.name} className={t.wide ? 'is-wide' : ''} loading="lazy" draggable={false} />
         <span className="tech-name">{t.name}{t.status === 'planned' ? ' · planned' : ''}</span>
       </li>
     ));
