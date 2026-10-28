@@ -1,4 +1,4 @@
-# OverlapWeave — UI Reference Audit & Refinement Plan
+# Routone — UI Reference Audit & Refinement Plan
 
 **Reference URL:** `https://parley.framer.ai/`  
 **Target Local URL:** `http://127.0.0.1:5173/`  
@@ -17,9 +17,9 @@ The current local implementation (`local-before/`) captured the general editoria
 
 ## 2. Section-by-Section Discrepancy Matrix
 
-### Section A: Feature Cards ("Why OverlapWeave")
+### Section A: Feature Cards ("Why Routone")
 
-| Property | Parley Framer Reference | Current Local OverlapWeave (`local-before`) | Discrepancy & Required Change |
+| Property | Parley Framer Reference | Current Local Routone (`local-before`) | Discrepancy & Required Change |
 | :--- | :--- | :--- | :--- |
 | **Card Layout & Sizing** | Container width 1240px, flex row with `gap: 12px`. Inactive card width **284px** (`flex: 1 0 0px`), height **420px**. Active card expands to **352px** (`flex: 1.24`), height **440px**. | 4 equal-width static CSS grid columns (`repeat(4, 1fr)`). Height fixed at 360px. | **High:** Replace static grid with expanding flex row. Inactive flex `1`, active flex `1.24`. Height `420px` transitioning to `440px`. |
 | **Inactive Surface** | Warm muted beige `rgb(238, 237, 230)` (`#EEEDE6` / `#EEECE4`). No prominent border. Large pale watermark number `01.`, `02.`, `03.`, `04.` at top-left. Geometric pattern at top-right. Title near bottom. | Plain white surface `#ffffff` with a light gray border around every card. Title at middle. | **High:** Set inactive card background to `#EEECE4`, remove harsh borders. Position pale watermark numbers and warm orange geometric motifs in upper section. |
@@ -29,7 +29,7 @@ The current local implementation (`local-before/`) captured the general editoria
 
 ### Section B: Hero Section
 
-| Property | Parley Framer Reference | Current Local OverlapWeave (`local-before`) | Discrepancy & Required Change |
+| Property | Parley Framer Reference | Current Local Routone (`local-before`) | Discrepancy & Required Change |
 | :--- | :--- | :--- | :--- |
 | **Hero Dimensions** | Vertical height 620–650px. Max content width ~1240–1280px. Generous internal padding (80px top/bottom). | Height 540px, slightly compressed vertically. | **Medium:** Adjust min-height to 620px, increase internal vertical breathing room. |
 | **Headlines & Copy** | Clear editorial proposition with italic supporting serif. | Contained unverified promises: "pristine speaker-attributed ASR", "Get started free". | **High:** Refine headline to: <br>Eyebrow: `MULTI-TALKER SPEECH RESEARCH`<br>Headline: `Hear more of the conversation.`<br>Italic line: `Even when voices collide.`<br>Body: Grounded description of selective routing. <br>CTAs: `Launch Studio` & `Explore Benchmarks`. |
@@ -37,20 +37,20 @@ The current local implementation (`local-before/`) captured the general editoria
 
 ### Section C: Capability Showcase ("Intelligent Delegation")
 
-| Property | Parley Framer Reference | Current Local OverlapWeave (`local-before`) | Discrepancy & Required Change |
+| Property | Parley Framer Reference | Current Local Routone (`local-before`) | Discrepancy & Required Change |
 | :--- | :--- | :--- | :--- |
 | **Left Selector List** | 4 vertically spaced items. Active item has orange double-chevron `>>`, semibold title, and concise active explanation. Inactive items quiet. | Had active item text, but copy was overly dense. | **Medium:** Align 4 items to: 1. *Original-mixture transcription*, 2. *Overlap-region detection*, 3. *Selective speech separation*, 4. *Speaker-attributed reconciliation*. |
-| **Right Application Mockup** | Clean miniature workstation window with macOS traffic lights, sidebar, and realistic application preview. | Generic task execution stepper. | **High:** Update mockup to showcase genuine OverlapWeave components: waveform canvas slice, acoustic clash detection interval, utility equation gauge ($U = +0.38$), and separated speaker dialogue. |
+| **Right Application Mockup** | Clean miniature workstation window with macOS traffic lights, sidebar, and realistic application preview. | Generic task execution stepper. | **High:** Update mockup to showcase genuine Routone components: waveform canvas slice, acoustic clash detection interval, utility equation gauge ($U = +0.38$), and separated speaker dialogue. |
 
 ### Section D: Integrations Section
 
-| Property | Parley Framer Reference | Current Local OverlapWeave (`local-before`) | Discrepancy & Required Change |
+| Property | Parley Framer Reference | Current Local Routone (`local-before`) | Discrepancy & Required Change |
 | :--- | :--- | :--- | :--- |
 | **Icon Presentation** | Pale square tiles with clean, restrained authentic logos. | Used colorful emoji marks (🔥, 🎙️, ⚡, 🤗, 🐳, 🐍). | **High:** Replace all emoji badges with crisp, monochrome or authentic SVG marks for PyTorch, Whisper, Torchaudio, FastAPI, Hugging Face, Docker, Python, Web Audio, Librosa/SciPy, React, WebRTC, GitHub. |
 
 ### Section E: Empirical Results & Performance Claims
 
-| Property | Parley Framer Reference | Current Local OverlapWeave (`local-before`) | Discrepancy & Required Change |
+| Property | Parley Framer Reference | Current Local Routone (`local-before`) | Discrepancy & Required Change |
 | :--- | :--- | :--- | :--- |
 | **Grounding of Metrics** | Genuine pricing / plan cards. | Highlighted `27.6% SA-WER`, `5.8× speedup`, `35% separation`, `0.0% degradation` without linking to actual benchmark file provenance. | **High:** Audit against `results/benchmarks.json`. Clearly distinguish evaluated synthetic test set metrics from general production claims. Rephrase routing explanation to distinguish predicted benefit from ground truth. Main CTA opens the Benchmark Lab. |
 
@@ -80,7 +80,7 @@ The current local implementation (`local-before/`) captured the general editoria
 
 3. **Phase 3: Capability Showcase & Application Mockup**
    - Align the 4 list items to the pipeline stages.
-   - Refine the right-side macOS application window to display genuine OverlapWeave visual cues (waveform timeline, clash interval, utility computation, demixed stems).
+   - Refine the right-side macOS application window to display genuine Routone visual cues (waveform timeline, clash interval, utility computation, demixed stems).
 
 4. **Phase 4: Integrations Grid Authentic SVGs**
    - Eliminate emoji icons; render clean, authentic SVG vector marks inside pale rounded tiles with subtle borders.
