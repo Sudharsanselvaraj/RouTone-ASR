@@ -41,9 +41,16 @@ Every value in the UI is labelled as *measured*, *estimate*, *heuristic* or *fix
 | **Adaptive Routing Lab** | Policy comparison on a recording, decision inspector, benefit-vs-cost chart, real pipeline trace |
 | **Benchmarks** | Strategy comparison, accuracy-vs-latency plot, integrity warnings, history |
 
-## Hosted interface
+## Deploy
 
-The interface is published at https://sudharsanselvaraj.github.io/RouTone-ASR/. GitHub Pages serves static files only, so the Python backend (Whisper, ConvTasNet) is not hosted there. Run `make server` locally and the hosted page connects to it at `localhost:8000` (Chrome, Edge or Firefox).
+| Part | Where | How |
+|---|---|---|
+| Interface | GitHub Pages | Automatic on push to `apps/web` (`.github/workflows/pages.yml`) |
+| API | Render (Docker) | Render, New > Blueprint, pick this repo (`render.yaml`, plan `standard`, 2 GB RAM) |
+
+After Render gives you the service URL, set it in the repo: **Settings > Secrets and variables > Actions > Variables > `API_BASE`** (for example `https://routone-api.onrender.com`), then re-run the Pages workflow. Without `API_BASE`, the hosted page falls back to `localhost:8000` (Chrome, Edge and Firefox allow that for a locally running `make server`).
+
+Notes: saved runs live on the container's disk and reset on redeploy; the real-speech benchmark dataset needs macOS `say`, so a hosted benchmark run falls back to the tone dataset and is reported as invalid.
 
 ## Quick start
 
