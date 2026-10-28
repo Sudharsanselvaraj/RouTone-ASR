@@ -4,22 +4,23 @@
    ========================================================================== */
 
 :root {
-  --parley-orange: #e07a1e;
-  --parley-orange-hover: #c96914;
-  --parley-orange-light: #fdf5eb;
-  --parley-orange-subtle: #fbebd8;
-  --parley-dark: #18181b;
-  --parley-dark-hover: #27272a;
-  --parley-bg: #fafaf8;
-  --parley-card-inactive: #eeede6;
-  --parley-card-active: #ffffff;
-  --parley-border: #e8e8e4;
-  --parley-border-subtle: #f2f2ee;
-  --parley-text-primary: #18181b;
-  --parley-text-secondary: #52525b;
-  --parley-text-muted: #71717a;
-  --parley-font-sans: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --parley-font-serif: 'Newsreader', 'Playfair Display', Georgia, serif;
+  /* Aligned with the Routone design tokens (styles/tokens.css) */
+  --parley-orange: #D97745;
+  --parley-orange-hover: #B85F32;
+  --parley-orange-light: #FAF0E7;
+  --parley-orange-subtle: #F4E2D3;
+  --parley-dark: #24231F;
+  --parley-dark-hover: #3A3832;
+  --parley-bg: #F7F5F0;
+  --parley-card-inactive: #EFEBE3;
+  --parley-card-active: #FFFEFB;
+  --parley-border: #DDD8CE;
+  --parley-border-subtle: #E9E5DC;
+  --parley-text-primary: #24231F;
+  --parley-text-secondary: #5F5B53;
+  --parley-text-muted: #6A665E;
+  --parley-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --parley-font-serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
 }
 
 .parley-landing {
@@ -251,21 +252,20 @@
 }
 
 .parley-hero-title {
-  font-family: var(--parley-font-serif);
-  font-size: clamp(40px, 5.6vw, 68px);
-  line-height: 1.1;
-  font-weight: 400;
+  font-size: clamp(36px, 5.2vw, 62px);
+  line-height: 1.12;
+  font-weight: 600;
   color: #ffffff;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.035em;
   margin-bottom: 22px;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.28);
 }
 
 .parley-hero-subtitle {
-  font-size: clamp(14px, 1.6vw, 16px);
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.88);
-  max-width: 640px;
+  font-size: clamp(15px, 1.8vw, 17.5px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.94);
+  max-width: 700px;
   margin: 0 auto 36px;
   font-weight: 400;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.22);
