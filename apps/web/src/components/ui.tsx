@@ -4,21 +4,16 @@ import { Info, X } from 'lucide-react';
 import { DECISION_LABEL, DECISION_SHORT } from '../lib/analysis';
 import type { RoutingMode } from '../types';
 
-/* Wordmark: two offset waveforms that overlap, drawn as plain geometry. */
+/* Brand mark: the Routone overlapping-waveform logo (transparent PNG, 2:1). */
 export function WordmarkMark({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className="wordmark-mark">
-      <path d="M2 12c2.2-6 4.4-6 6.6 0s4.4 6 6.6 0 4.4-6 6.6 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M2 12c2.2 6 4.4 6 6.6 0s4.4-6 6.6 0 4.4 6 6.6 0" stroke="var(--accent)" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
+  return <img src="/brand/routone-mark.png" alt="" aria-hidden="true" height={size} width={Math.round(size * 1.98)} className="wordmark-mark" />;
 }
 
 export function Wordmark({ size = 22 }: { size?: number }) {
   return (
     <span className="wordmark">
       <WordmarkMark size={size} />
-      <span className="wordmark-text">Routone</span>
+      <span className="wordmark-text">Rou<b>Tone</b></span>
     </span>
   );
 }
