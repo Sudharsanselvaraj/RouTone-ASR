@@ -3,9 +3,9 @@
 import numpy as np
 import pytest
 
-from overlapweave.schemas.models import OverlapRegion, TranscriptSegment, RoutingMode
-from overlapweave.routing.policies import build_controller, replay_decisions, STRATEGIES
-from overlapweave.routing.controller import BenefitAwareController
+from routone.schemas.models import OverlapRegion, TranscriptSegment, RoutingMode
+from routone.routing.policies import build_controller, replay_decisions, STRATEGIES
+from routone.routing.controller import BenefitAwareController
 
 
 def _region(rid="r0", score=0.75, clash=0.65, dur=2.0, spk=2):
@@ -52,7 +52,7 @@ def test_unknown_strategy():
 
 
 def test_replay_requires_stored_features():
-    from overlapweave.schemas.models import RoutingDecision
+    from routone.schemas.models import RoutingDecision
     d = RoutingDecision(region_id="r", start=0, end=1, decision=RoutingMode.KEEP_MIXTURE,
                         predicted_benefit=0.0, normalized_cost=0.0, utility=0.0,
                         features={"overlap_score": 0.5, "normalized_cost": 0.0})
