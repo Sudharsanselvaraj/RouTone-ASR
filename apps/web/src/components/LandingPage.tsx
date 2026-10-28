@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useWorkbench } from '../state/store';
 import { WordmarkMark } from './ui';
+import { TechMarquee } from './TechMarquee';
 import {
   ChevronRight,
   ArrowUpRight,
@@ -12,9 +13,41 @@ interface LandingPageProps {
   onNavigate: (tab: 'overview' | 'studio' | 'inspector' | 'routing' | 'benchmarks', preset?: 'overlap' | 'clean') => void;
 }
 
+/** Scroll-reveal: fades and lifts marked elements into view once, respecting reduced motion. */
+function useReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const targets = [...root.querySelectorAll<HTMLElement>(
+      '.parley-section-header, .parley-cards-flex-row, .parley-workflow-showcase, .tech-marquee, .tech-note, .parley-metric-card, .parley-bench-cta-wrap, .parley-banner-content, .parley-footer-top',
+    )];
+    if (reduce || !('IntersectionObserver' in window)) return;
+    targets.forEach((t, i) => {
+      t.classList.add('reveal');
+      t.style.setProperty('--reveal-delay', `${(i % 4) * 70}ms`);
+    });
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-in');
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+    );
+    targets.forEach((t) => io.observe(t));
+    return () => io.disconnect();
+  }, []);
+  return ref;
+}
+
 export default function LandingPage({ onNavigate }: LandingPageProps) {
   const wb = useWorkbench();
   const bench = wb.benchmark;
+  const rootRef = useReveal();
 
   // Feature cards active index (0: Mixture ASR, 1: Overlap Detection, 2: Benefit Routing, 3: Measured Evaluation)
   const [activeCardIndex, setActiveCardIndex] = useState(0);
@@ -155,7 +188,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
   const currentWorkflow = workflows[activeWorkflowIndex];
 
   return (
-    <div className="parley-landing">
+    <div className="parley-landing" ref={rootRef}>
       {/* 1. TOP NAVIGATION BAR */}
       <header className="parley-nav">
         <div className="parley-nav-container">
@@ -167,7 +200,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
 
           <nav className="parley-nav-links">
-            <a href="#why-weave">Why Routone</a>
+            <a href="#why-routone">Why Routone</a>
             <a href="#workflow">Workflow</a>
             <a href="#integrations">Integrations</a>
             <button onClick={() => onNavigate('benchmarks')} className="parley-nav-link-btn">
@@ -202,10 +235,6 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="parley-hero-overlay"></div>
 
           <div className="parley-hero-content">
-            <div className="parley-hero-badge">
-              <span className="parley-hero-badge-dot"></span>
-              ADAPTIVE ROUTING FOR OVERLAPPING SPEECH RECOGNITION
-            </div>
 
             <h1 className="parley-hero-title">
               Understand mixed speech. <br />
@@ -266,7 +295,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* 3. WHY ROUTONE SECTION — EXPANDABLE FEATURE CARDS */}
-      <section id="why-weave" className="parley-section">
+      <section id="why-routone" className="parley-section">
         <div className="parley-section-header">
           <div>
             <span className="parley-eyebrow">Why Routone</span>
@@ -395,7 +424,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <span className="parley-eyebrow">Intelligent Delegation</span>
             <h2 className="parley-section-title">
               Feed mixed speech once. <br />
-              <span className="parley-serif-italic">Weave demixes the rest.</span>
+              <span className="parley-serif-italic">Routone demixes the rest.</span>
             </h2>
           </div>
           <p className="parley-section-lead">
@@ -532,163 +561,20 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 5. INTEGRATIONS SECTION WITH AUTHENTIC RESTRAINED SVG ICONS */}
-      <section id="integrations" className="parley-section">
+      {/* 5. TECHNOLOGY — two-row marquee of real project logos, same pattern as Parley's integrations */}
+      <section id="integrations" className="parley-section parley-section-light">
         <div className="parley-section-header parley-center-header">
-          <span className="parley-eyebrow">Integrations &amp; Stack</span>
+          <span className="parley-eyebrow">Technology</span>
           <h2 className="parley-section-title">
             Connect your speech pipeline. <br />
             <span className="parley-serif-italic">Routone meets you there.</span>
           </h2>
           <p className="parley-section-lead center">
-            PyTorch, faster-whisper, Torchaudio, FastAPI, Hugging Face, and Web Audio.
-            Routone triggers actions, fetches acoustic context, and keeps transcripts synchronized — right where your team already works.
+            PyTorch, torchaudio, librosa, faster-whisper with Silero VAD, FFmpeg and more. Open tools, wired into one workbench.
           </p>
         </div>
-
-        {/* 2 ROWS OF SOFT ROUNDED TILES WITH AUTHENTIC SVGS (NO EMOJIS) */}
-        <div className="parley-integrations-wrap">
-          <div className="parley-integrations-row">
-            <div className="parley-tool-tile" title="PyTorch 2.x">
-              <div className="tool-logo-mark">
-                {/* PyTorch SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EE4C2C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-                </svg>
-              </div>
-              <span className="tool-name">PyTorch 2.x</span>
-            </div>
-
-            <div className="parley-tool-tile" title="faster-whisper int8 inference engine">
-              <div className="tool-logo-mark">
-                {/* Audio Waveform SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M2 10v4M6 6v12M10 3v18M14 8v8M18 5v14M22 10v4" />
-                </svg>
-              </div>
-              <span className="tool-name">faster-whisper</span>
-            </div>
-
-            <div className="parley-tool-tile" title="Torchaudio separation pipelines">
-              <div className="tool-logo-mark">
-                {/* Sound Stream SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" />
-                </svg>
-              </div>
-              <span className="tool-name">Torchaudio</span>
-            </div>
-
-            <div className="parley-tool-tile" title="FastAPI async REST endpoints">
-              <div className="tool-logo-mark">
-                {/* FastAPI Zap SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#009688" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                </svg>
-              </div>
-              <span className="tool-name">FastAPI</span>
-            </div>
-
-            <div className="parley-tool-tile" title="Hugging Face models & Hub">
-              <div className="tool-logo-mark">
-                {/* Hub Model SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" />
-                </svg>
-              </div>
-              <span className="tool-name">Hugging Face</span>
-            </div>
-
-            <div className="parley-tool-tile" title="Docker reproducible containers">
-              <div className="tool-logo-mark">
-                {/* Docker Container SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="7" width="20" height="14" rx="2" />
-                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                </svg>
-              </div>
-              <span className="tool-name">Docker</span>
-            </div>
-          </div>
-
-          <div className="parley-integrations-row">
-            <div className="parley-tool-tile" title="Python 3.11 scientific stack">
-              <div className="tool-logo-mark">
-                {/* Python Terminal SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="4 17 10 11 4 5" />
-                  <line x1="12" y1="19" x2="20" y2="19" />
-                </svg>
-              </div>
-              <span className="tool-name">Python 3.11</span>
-            </div>
-
-            <div className="parley-tool-tile" title="Web Audio & PyAV in-memory decoding">
-              <div className="tool-logo-mark">
-                {/* Equalizer Slider SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="4" y1="21" x2="4" y2="14" />
-                  <line x1="4" y1="10" x2="4" y2="3" />
-                  <line x1="12" y1="21" x2="12" y2="12" />
-                  <line x1="12" y1="8" x2="12" y2="3" />
-                  <line x1="20" y1="21" x2="20" y2="16" />
-                  <line x1="20" y1="12" x2="20" y2="3" />
-                  <line x1="1" y1="14" x2="7" y2="14" />
-                  <line x1="9" y1="8" x2="15" y2="8" />
-                  <line x1="17" y1="16" x2="23" y2="16" />
-                </svg>
-              </div>
-              <span className="tool-name">Web Audio API</span>
-            </div>
-
-            <div className="parley-tool-tile" title="Librosa & SciPy signal processing">
-              <div className="tool-logo-mark">
-                {/* Signal Curve SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 12c3-8 6-8 9 0s6 8 9 0" />
-                </svg>
-              </div>
-              <span className="tool-name">Librosa / SciPy</span>
-            </div>
-
-            <div className="parley-tool-tile" title="React 19 & TypeScript frontend">
-              <div className="tool-logo-mark">
-                {/* React Atom SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)" />
-                  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(90 12 12)" />
-                  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(150 12 12)" />
-                  <circle cx="12" cy="12" r="1.5" />
-                </svg>
-              </div>
-              <span className="tool-name">React 19</span>
-            </div>
-
-            <div className="parley-tool-tile" title="WebRTC real-time microphone capture">
-              <div className="tool-logo-mark">
-                {/* Antenna Broadcast SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4.93 19.07a10 10 0 0 1 0-14.14M7.76 16.24a6 6 0 0 1 0-8.48M12 12h.01" />
-                </svg>
-              </div>
-              <span className="tool-name">WebRTC</span>
-            </div>
-
-            <div className="parley-tool-tile" title="GitHub Actions CI/CD automation">
-              <div className="tool-logo-mark">
-                {/* Git Branch SVG */}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4B5563" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="6" y1="3" x2="6" y2="15" />
-                  <circle cx="18" cy="6" r="3" />
-                  <circle cx="6" cy="18" r="3" />
-                  <path d="M18 9a9 9 0 0 1-9 9" />
-                </svg>
-              </div>
-              <span className="tool-name">GitHub Actions</span>
-            </div>
-          </div>
-        </div>
+        <TechMarquee />
+        <p className="tech-note">Hover a logo for its role. Items marked planned are on the roadmap and not yet wired in.</p>
       </section>
 
       {/* 6. EVALUATION — live state of the saved benchmark, never hardcoded numbers */}
@@ -811,7 +697,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <h5 className="footer-col-title">Architecture</h5>
                 <ul>
                   <li><a href="#workflow" className="footer-link">Multi-Pitch Detection</a></li>
-                  <li><a href="#why-weave" className="footer-link">Benefit Controller</a></li>
+                  <li><a href="#why-routone" className="footer-link">Benefit Controller</a></li>
                   <li><a href="#workflow" className="footer-link">Conv-TasNet Demixer</a></li>
                   <li><a href="#workflow" className="footer-link">Transcript Reconciler</a></li>
                 </ul>
