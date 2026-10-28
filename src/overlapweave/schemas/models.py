@@ -84,6 +84,17 @@ class SeparationResult(BaseModel):
     success: bool = True
     fallback_used: bool = False
     details: str = "ConvTasNet Libri2Mix separation executed successfully"
+    window_start: Optional[float] = Field(default=None, description="Start (s) of the audio window that was separated")
+    window_end: Optional[float] = Field(default=None, description="End (s) of the audio window that was separated")
+
+
+class TraceEvent(BaseModel):
+    """A real, timestamped event emitted by the pipeline while processing a recording."""
+    event: str
+    t_ms: float = Field(..., description="Milliseconds since pipeline start (monotonic clock)")
+    duration_ms: Optional[float] = Field(default=None, description="Measured duration of the step, if it is a timed step")
+    region_id: Optional[str] = None
+    detail: str = ""
 
 
 class ReconciliationResult(BaseModel):
@@ -104,6 +115,10 @@ class PipelineResult(BaseModel):
     final_transcript: List[TranscriptSegment]
     metrics: Dict[str, Any] = Field(default_factory=dict)
     processing_time_ms: float = 0.0
+    separation_results: List[SeparationResult] = Field(default_factory=list)
+    trace: List[TraceEvent] = Field(default_factory=list)
+    config: Dict[str, Any] = Field(default_factory=dict, description="Settings actually used for this run")
+    run_id: Optional[str] = Field(default=None, description="Identifier of the persisted run, if saved")
 
 
 class EvaluationMetricSummary(BaseModel):
@@ -115,9 +130,20 @@ class EvaluationMetricSummary(BaseModel):
     p50_latency_ms: float
     p90_latency_ms: float
     p95_latency_ms: float
-    separation_invocation_rate: float
+    separation_invocation_rate: Optional[float] = Field(
+        default=None,
+        description="Separated regions / detected regions. None when no regions were detected (undefined, not zero).",
+    )
     total_regions_processed: int
     evaluated_samples_count: int
+    # --- integrity bookkeeping (added; older reports lack these) ---
+    reference_word_count: int = 0
+    hypothesis_word_count: int = 0
+    empty_hypothesis_samples: int = 0
+    separated_regions: int = 0
+    latency_ms_samples: List[float] = Field(default_factory=list)
+    valid: bool = True
+    notes: List[str] = Field(default_factory=list)
 
 
 class BenchmarkReport(BaseModel):
@@ -126,3 +152,10 @@ class BenchmarkReport(BaseModel):
     results: List[EvaluationMetricSummary]
     pareto_optimal_system: str
     summary_analysis: str
+    # --- integrity bookkeeping (added; older reports lack these) ---
+    status: str = Field(default="unknown", description="'valid', 'invalid' or 'incomplete'")
+    warnings: List[str] = Field(default_factory=list)
+    pareto_front: List[str] = Field(default_factory=list)
+    dataset: Dict[str, Any] = Field(default_factory=dict)
+    not_evaluated: Dict[str, str] = Field(default_factory=dict, description="Strategy -> reason it was not run")
+    config: Dict[str, Any] = Field(default_factory=dict)
