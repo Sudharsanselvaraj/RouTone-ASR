@@ -1,7 +1,7 @@
 # Empirical Evaluation and Experimental Benchmarks
 
 ## 1. Experimental Design & Objectives
-The central research hypothesis of OverlapWeave is:
+The central research hypothesis of Routone is:
 > *A region-level benefit-aware controller can predict when speech separation will improve speaker-attributed ASR sufficiently to justify its additional computational cost, achieving a superior accuracy–latency Pareto trade-off compared to always separating or relying on fixed overlap thresholding.*
 
 To validate this hypothesis, we evaluate five experimental systems under identical acoustic configurations.
@@ -42,7 +42,7 @@ The table below reports real experimental results measured on the frozen Tamil�
    Baseline B (Always-Separate) incurs a 5.4× latency penalty (1,914.5 ms vs 352.1 ms), executing redundant 2-stream Whisper passes even on clear, non-overlapping speech spans. The Proposed Benefit-Aware Controller invokes separation only when high acoustic overlap and baseline transcription confusion coincide, reducing overall median latency by over 64% relative to Baseline B.
 
 2. **Prevention of Single-Speaker Audio Degradation:**
-   On clean single-speaker utterances, applying ConvTasNet introduces subtle non-linear phase distortions and speech leakage. By routing single-speaker audio through the untouched mixture path, OverlapWeave achieves higher word accuracy than Baseline B on clean speech while preserving multi-speaker recovery on true overlaps.
+   On clean single-speaker utterances, applying ConvTasNet introduces subtle non-linear phase distortions and speech leakage. By routing single-speaker audio through the untouched mixture path, Routone achieves higher word accuracy than Baseline B on clean speech while preserving multi-speaker recovery on true overlaps.
 
 3. **Comparison with Fixed Thresholding (Baseline C):**
    Baseline C triggers separation purely on acoustic energy/flatness fluctuations, often routing unvoiced fricatives (e.g. sibilants with high zero-crossing rates) unnecessarily. The Proposed Controller integrates baseline token log-probability uncertainty $\mathcal{U}_{baseline}$, achieving an 7.5% absolute reduction in SA-WER over fixed thresholding.
