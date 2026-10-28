@@ -31,10 +31,12 @@ app = FastAPI(
 )
 
 # Enable CORS for frontend development
+# ROUTONE_CORS_ORIGINS: comma-separated origins allowed to call the API (default: any). No cookies are used.
+_cors_origins = [o.strip() for o in os.environ.get("ROUTONE_CORS_ORIGINS", "*").split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
