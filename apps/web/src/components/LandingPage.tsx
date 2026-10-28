@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { useWorkbench } from '../state/store';
 import { WordmarkMark } from './ui';
 import { TechMarquee } from './TechMarquee';
 import { FeatureCards } from './FeatureCards';
+import { EvaluationSection } from './EvaluationSection';
 import { asset } from '../lib/assets';
 import {
   ChevronRight,
@@ -23,7 +23,7 @@ function useReveal() {
     if (!root) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const targets = [...root.querySelectorAll<HTMLElement>(
-      '.parley-section-header, .fc-row, .parley-workflow-showcase, .tech-marquee, .parley-metric-card, .parley-bench-cta-wrap, .parley-banner-content, .parley-footer-top',
+      '.parley-section-header, .fc-row, .parley-workflow-showcase, .tech-marquee, .ev-head, .ev-panel, .ev-cta, .parley-banner-content, .parley-footer-top',
     )];
     if (reduce || !('IntersectionObserver' in window)) return;
     targets.forEach((t, i) => {
@@ -47,8 +47,6 @@ function useReveal() {
 }
 
 export default function LandingPage({ onNavigate }: LandingPageProps) {
-  const wb = useWorkbench();
-  const bench = wb.benchmark;
   const rootRef = useReveal();
 
   // Capability showcase workflow index
@@ -390,52 +388,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         <TechMarquee />
       </section>
 
-      {/* 6. EVALUATION — live state of the saved benchmark, never hardcoded numbers */}
-      <section className="parley-section parley-section-light">
-        <div className="parley-section-header parley-center-header">
-          <span className="parley-eyebrow">Evaluation</span>
-          <h2 className="parley-section-title">
-            Claims follow the data. <br />
-            <span className="parley-serif-italic">Nothing is shown that wasn’t measured.</span>
-          </h2>
-          <p className="parley-section-lead center">
-            {bench
-              ? `Latest saved benchmark: ${bench.dataset_name}. Status: ${bench.status ?? 'legacy report (validity unknown)'}.`
-              : wb.backend === 'offline'
-                ? 'Start the backend to see the latest benchmark status.'
-                : 'No benchmark has been run yet.'}
-          </p>
-        </div>
-
-        {bench && (
-          <div className="parley-metrics-grid">
-            <div className="parley-metric-card">
-              <div className="metric-val">{bench.results.length}</div>
-              <div className="metric-title">Strategies evaluated</div>
-              <div className="metric-desc">Only strategies that actually ran are listed.</div>
-            </div>
-            <div className="parley-metric-card">
-              <div className="metric-val">{bench.dataset?.samples_evaluated ?? bench.results[0]?.evaluated_samples_count ?? '—'}</div>
-              <div className="metric-title">Recordings scored</div>
-              <div className="metric-desc">Small samples cannot support claims of improvement.</div>
-            </div>
-            <div className="parley-metric-card">
-              <div className="metric-val">{bench.status ?? 'unknown'}</div>
-              <div className="metric-title">Experiment status</div>
-              <div className="metric-desc">{(bench.warnings ?? [])[0] ?? 'Re-run the benchmark to attach integrity checks.'}</div>
-            </div>
-          </div>
-        )}
-
-        <div className="parley-bench-cta-wrap">
-          <button onClick={() => onNavigate('benchmarks')} className="parley-btn">
-            <span className="parley-btn-icon">
-              <ChevronRight size={16} strokeWidth={2.5} />
-            </span>
-            <span className="parley-btn-label">Open Benchmarks</span>
-          </button>
-        </div>
-      </section>
+      {/* 6. EVALUATION: live state of the saved benchmark */}
+      <EvaluationSection onOpen={() => onNavigate('benchmarks')} />
 
       {/* 7. BOTTOM BANNER CTA CARD */}
       <section className="parley-banner-section">
