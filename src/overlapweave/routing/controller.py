@@ -44,6 +44,10 @@ class ThresholdController(BaseController):
         sr: int = 16000
     ) -> RoutingDecision:
         features = FeatureExtractor.extract_region_features(region, baseline_segments, audio, sr)
+        return self.decide(region.region_id, region.start, region.end, features)
+
+    def decide(self, region_id: str, start: float, end: float, features: Dict[str, float]) -> RoutingDecision:
+        """Pure decision rule over already-extracted features (used by route_region and policy replay)."""
         score = features["overlap_score"]
         norm_cost = features["normalized_cost"]
 
@@ -59,9 +63,9 @@ class ThresholdController(BaseController):
             rationale = f"Overlap score {score:.2f} < threshold {self.threshold:.2f}; keeping mixture."
 
         return RoutingDecision(
-            region_id=region.region_id,
-            start=region.start,
-            end=region.end,
+            region_id=region_id,
+            start=start,
+            end=end,
             decision=decision,
             predicted_benefit=round(predicted_benefit, 4),
             normalized_cost=round(norm_cost, 4),
@@ -122,15 +126,19 @@ class BenefitAwareController(BaseController):
         sr: int = 16000
     ) -> RoutingDecision:
         features = FeatureExtractor.extract_region_features(region, baseline_segments, audio, sr)
+        return self.decide(region.region_id, region.start, region.end, features)
+
+    def decide(self, region_id: str, start: float, end: float, features: Dict[str, float]) -> RoutingDecision:
+        """Pure decision rule over already-extracted features (used by route_region and policy replay)."""
         norm_cost = features["normalized_cost"]
         speaker_count = features["speaker_count_estimate"]
 
         # Check for multi-speaker ambiguity: ConvTasNet is 2-speaker
         if speaker_count >= 3.0:
             return RoutingDecision(
-                region_id=region.region_id,
-                start=region.start,
-                end=region.end,
+                region_id=region_id,
+                start=start,
+                end=end,
                 decision=RoutingMode.FLAG_REVIEW,
                 predicted_benefit=0.10,
                 normalized_cost=round(norm_cost, 4),
@@ -173,9 +181,9 @@ class BenefitAwareController(BaseController):
                 )
 
         return RoutingDecision(
-            region_id=region.region_id,
-            start=region.start,
-            end=region.end,
+            region_id=region_id,
+            start=start,
+            end=end,
             decision=decision,
             predicted_benefit=round(predicted_benefit, 4),
             normalized_cost=round(norm_cost, 4),
