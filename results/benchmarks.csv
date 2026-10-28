@@ -1,6 +1,6 @@
 Method,SA_WER,Standard_WER,Overlap_WER,Speaker1_Recall,Speaker2_Recall,P50_Latency_ms,P95_Latency_ms,Separation_Invocation_Rate,Samples_Evaluated
-Baseline A (Mixture-only),1.0,1.0,1.0,0.0,0.0,304.2,339.1,0.0,3
-Baseline B (Always-Separate),1.0,1.0,1.0,0.0,0.0,305.5,329.3,0.0,3
-Baseline C (Threshold theta=0.5),1.0,1.0,1.0,0.0,0.0,303.7,326.2,0.0,3
-Proposed (Benefit-Aware),1.0,1.0,1.0,0.0,0.0,304.2,328.8,0.0,3
-Oracle (Diagnostic Bound),1.0,1.0,1.0,0.0,0.0,307.7,331.7,0.0,3
+Baseline A (Mixture-only),1.0,1.0,1.0,0.0,0.0,438.4,2184.4,0.0,3
+Baseline B (Always-Separate),1.0,1.0,1.0,0.0,0.0,407.2,1701.3,0.0,3
+Baseline C (Threshold theta=0.5),1.0,1.0,1.0,0.0,0.0,372.3,2614.2,0.0,3
+Proposed (Benefit-Aware),1.0,1.0,1.0,0.0,0.0,354.7,1605.8,0.0,3
+Oracle (Diagnostic Bound),1.0,1.0,1.0,0.0,0.0,368.6,1730.7,0.0,3
