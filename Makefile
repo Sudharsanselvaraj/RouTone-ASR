@@ -10,10 +10,10 @@ test:
 	.venv/bin/pytest tests/ -v
 
 eval:
-	.venv/bin/python -c "from overlapweave.evaluation.harness import BenchmarkHarness; BenchmarkHarness().run_benchmark(save_results=True)"
+	.venv/bin/python -c "from routone.evaluation.harness import BenchmarkHarness; BenchmarkHarness().run_benchmark(save_results=True)"
 
 server:
-	.venv/bin/uvicorn overlapweave.api.app:app --host 127.0.0.1 --port 8000 --reload
+	.venv/bin/uvicorn routone.api.app:app --host 127.0.0.1 --port 8000 --reload
 
 web:
 	cd apps/web && npm run dev
