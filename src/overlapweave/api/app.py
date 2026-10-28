@@ -129,10 +129,21 @@ async def run_benchmarks_now():
 @app.get("/api/sample-audio/{sample_id}")
 async def get_sample_audio(sample_id: str):
     """Provides pre-synthesized conversational samples for one-click demo testing."""
+    from pathlib import Path
+    demo_dir = Path(__file__).resolve().parent.parent.parent.parent / "data" / "demo_samples"
+    if sample_id in ("eval_te_01", "overlap") and (demo_dir / "overlap_two_speakers.wav").exists():
+        with open(demo_dir / "overlap_two_speakers.wav", "rb") as f:
+            return Response(content=f.read(), media_type="audio/wav")
+    if sample_id in ("eval_en_03", "clean") and (demo_dir / "clean_single_speaker.wav").exists():
+        with open(demo_dir / "clean_single_speaker.wav", "rb") as f:
+            return Response(content=f.read(), media_type="audio/wav")
+    if sample_id in ("eval_te_02", "cs") and (demo_dir / "overlap_two_speakers.wav").exists():
+        with open(demo_dir / "overlap_two_speakers.wav", "rb") as f:
+            return Response(content=f.read(), media_type="audio/wav")
+
     dataset = SyntheticDatasetGenerator.get_dataset(split="test")
     match = next((s for s in dataset if s["id"] == sample_id), None)
     if not match:
-        # Fallback to first available sample
         match = dataset[0]
 
     wav_bytes = AudioProcessor.audio_to_wav_bytes(match["mixture_audio"])

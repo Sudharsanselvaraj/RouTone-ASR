@@ -4,9 +4,12 @@ from __future__ import annotations
 import io
 import math
 from typing import Tuple, Optional, Union
+import os
+import tempfile
 import numpy as np
 import soundfile as sf
 import librosa
+import av
 
 from overlapweave.schemas.models import AudioMetadata
 
@@ -52,20 +55,74 @@ class AudioProcessor:
         else:
             raise ValueError(f"Unsupported source type: {type(source)}")
 
-        # Read audio using soundfile first, fallback to librosa
+        # Multi-stage audio decoding:
+        # Stage 1: soundfile (fastest for WAV, FLAC, OGG)
+        audio = None
+        orig_sr = target_sr
+        orig_channels = 1
+        decode_errors = []
+
         try:
+            if isinstance(buffer, io.BytesIO):
+                buffer.seek(0)
             audio, orig_sr = sf.read(buffer, dtype="float32", always_2d=False)
         except Exception as sf_err:
+            decode_errors.append(f"soundfile: {sf_err}")
+
+        # Stage 2: PyAV (decodes in-memory WebM/Opus from browser MediaRecorder, MP4, AAC, MP3, etc.)
+        if audio is None:
             try:
-                # Librosa uses audioread/ffmpeg under the hood
                 if isinstance(buffer, io.BytesIO):
                     buffer.seek(0)
-                audio, orig_sr = librosa.load(buffer, sr=None, mono=False)
-                # librosa outputs (channels, N) or (N,)
-                if audio.ndim == 2:
-                    audio = audio.T
+                container = av.open(buffer)
+                if len(container.streams.audio) > 0:
+                    stream = container.streams.audio[0]
+                    orig_channels = getattr(stream.codec_context, "channels", 1) or 1
+                    resampler = av.AudioResampler(format="fltp", layout="mono", rate=target_sr)
+                    frames_list = []
+                    for frame in container.decode(stream):
+                        frame.pts = None
+                        for rf in resampler.resample(frame):
+                            frames_list.append(rf.to_ndarray())
+                    for rf in resampler.resample(None):
+                        frames_list.append(rf.to_ndarray())
+                    if frames_list:
+                        audio = np.concatenate(frames_list, axis=1)[0].astype(np.float32)
+                        orig_sr = target_sr
+                    else:
+                        decode_errors.append("pyav: No decoded audio frames returned")
+                else:
+                    decode_errors.append("pyav: No audio streams found in container")
+            except Exception as av_err:
+                decode_errors.append(f"pyav: {av_err}")
+
+        # Stage 3: Tempfile fallback with librosa / ffmpeg
+        if audio is None:
+            try:
+                if isinstance(buffer, io.BytesIO):
+                    raw_bytes = buffer.getvalue()
+                elif isinstance(buffer, str):
+                    with open(buffer, "rb") as f:
+                        raw_bytes = f.read()
+                else:
+                    raw_bytes = buffer
+
+                with tempfile.NamedTemporaryFile(suffix=".audio", delete=False) as tmp:
+                    tmp.write(raw_bytes)
+                    tmp_path = tmp.name
+
+                try:
+                    audio, orig_sr = librosa.load(tmp_path, sr=None, mono=False)
+                    if audio.ndim == 2:
+                        audio = audio.T
+                finally:
+                    if os.path.exists(tmp_path):
+                        os.remove(tmp_path)
             except Exception as lib_err:
-                raise ValueError(f"Failed to decode audio. Soundfile error: {sf_err}; Librosa error: {lib_err}")
+                decode_errors.append(f"librosa: {lib_err}")
+
+        if audio is None:
+            raise ValueError(f"Failed to decode audio. Errors: {'; '.join(decode_errors)}")
 
         # Handle channels -> Convert to mono by averaging
         if audio.ndim > 1:

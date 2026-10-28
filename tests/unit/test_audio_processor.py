@@ -61,3 +61,28 @@ def test_audio_to_wav_bytes():
     wav_bytes = AudioProcessor.audio_to_wav_bytes(audio, sr=16000)
     assert len(wav_bytes) > 44  # Valid WAV header + data
     assert wav_bytes[:4] == b"RIFF"
+
+
+def test_audio_processor_webm_opus():
+    import av
+    out_buf = io.BytesIO()
+    out_cont = av.open(out_buf, mode="w", format="webm")
+    out_stream = out_cont.add_stream("opus", rate=48000)
+    t = np.linspace(0, 1.0, 48000, False)
+    sig = (np.sin(2 * np.pi * 440 * t) * 0.4).astype(np.float32)
+    frame = av.AudioFrame.from_ndarray(sig[np.newaxis, :], format="flt", layout="mono")
+    frame.sample_rate = 48000
+    for packet in out_stream.encode(frame):
+        out_cont.mux(packet)
+    for packet in out_stream.encode():
+        out_cont.mux(packet)
+    out_cont.close()
+
+    raw_webm = out_buf.getvalue()
+    audio, meta = AudioProcessor.load_audio(raw_webm)
+
+    assert meta.sample_rate == 16000
+    assert 0.95 <= meta.duration_seconds <= 1.05
+    assert len(audio) == 16000
+    assert meta.rms_energy > 0.0
+

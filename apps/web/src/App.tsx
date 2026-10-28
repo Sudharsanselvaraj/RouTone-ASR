@@ -260,7 +260,22 @@ export default function App() {
         audioChunksRef.current = [];
         setRecordingSeconds(0);
 
-        const recorder = new MediaRecorder(stream);
+        // Detect supported mime types for browser recording
+        let mimeType = 'audio/webm';
+        if (typeof MediaRecorder !== 'undefined') {
+          if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+            mimeType = 'audio/webm;codecs=opus';
+          } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+            mimeType = 'audio/webm';
+          } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+            mimeType = 'audio/mp4';
+          } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
+            mimeType = 'audio/ogg';
+          }
+        }
+
+        const options = mimeType ? { mimeType } : undefined;
+        const recorder = new MediaRecorder(stream, options);
         mediaRecorderRef.current = recorder;
 
         recorder.ondataavailable = (event) => {
@@ -268,8 +283,20 @@ export default function App() {
         };
 
         recorder.onstop = () => {
-          const blob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-          processAudioBlob(blob, 'microphone_capture.wav');
+          if (audioChunksRef.current.length === 0) {
+            setErrorMsg('No audio captured. Please speak into the microphone and try again.');
+            stream.getTracks().forEach(t => t.stop());
+            return;
+          }
+          const actualMime = recorder.mimeType || mimeType || 'audio/webm';
+          const ext = actualMime.includes('mp4') ? 'm4a' : actualMime.includes('ogg') ? 'ogg' : 'webm';
+          const blob = new Blob(audioChunksRef.current, { type: actualMime });
+          if (blob.size < 200) {
+            setErrorMsg('Microphone recording is too short. Please speak for at least 1-2 seconds.');
+            stream.getTracks().forEach(t => t.stop());
+            return;
+          }
+          processAudioBlob(blob, `microphone_capture.${ext}`);
           stream.getTracks().forEach(t => t.stop());
         };
 
