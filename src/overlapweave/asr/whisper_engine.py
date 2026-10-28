@@ -40,7 +40,9 @@ class WhisperASREngine:
         language: Optional[str] = None,
         speaker_label: str = "Speaker 1",
         source_path: str = "mixture",
-        time_offset: float = 0.0
+        time_offset: float = 0.0,
+        vad_filter: bool = True,
+        word_timestamps: bool = True
     ) -> Tuple[List[TranscriptSegment], float, str]:
         """Transcribes 16kHz mono audio array using faster-whisper.
 
@@ -50,6 +52,8 @@ class WhisperASREngine:
             speaker_label: Attributed speaker name.
             source_path: Provenance tag ('mixture', 'separated_stream_a', 'separated_stream_b').
             time_offset: Offset in seconds to add to segment and word timestamps.
+            vad_filter: Enable faster-whisper's Silero VAD pre-filter.
+            word_timestamps: Compute word-level timestamps (otherwise segments carry no words).
 
         Returns:
             Tuple of (segments: List[TranscriptSegment], elapsed_ms: float, detected_language: str).
@@ -63,9 +67,9 @@ class WhisperASREngine:
         segments_gen, info = self.model.transcribe(
             audio,
             language=language,
-            word_timestamps=True,
-            vad_filter=True,
-            vad_parameters=dict(min_silence_duration_ms=400)
+            word_timestamps=word_timestamps,
+            vad_filter=vad_filter,
+            vad_parameters=dict(min_silence_duration_ms=400) if vad_filter else None
         )
 
         detected_lang = info.language if info else (language or "en")
@@ -106,6 +110,8 @@ class WhisperASREngine:
 
         elapsed_ms = (time.perf_counter() - start_time) * 1000.0
         return segments, elapsed_ms, detected_lang
+
+    SUPPORTED_MODELS = ("tiny", "base")
 
     @classmethod
     def get_default_engine(cls, model_size: str = "tiny") -> WhisperASREngine:
