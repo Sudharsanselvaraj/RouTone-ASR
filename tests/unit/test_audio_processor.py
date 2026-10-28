@@ -4,7 +4,7 @@ import io
 import numpy as np
 import pytest
 import soundfile as sf
-from overlapweave.audio.processor import AudioProcessor
+from routone.audio.processor import AudioProcessor
 
 
 def test_audio_processor_valid_wav():
