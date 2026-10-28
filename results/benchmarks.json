@@ -1,88 +1,159 @@
 {
-  "timestamp": "2026-10-28T10:00:32.721284",
-  "dataset_name": "Tamil-English Synthetic Overlap Test Set (v1.0)",
+  "timestamp": "2026-10-28T10:11:07.128537",
+  "dataset_name": "TTS Overlap Mixtures (macOS say, test split)",
   "results": [
     {
       "method_name": "Baseline A (Mixture-only)",
-      "speaker_attributed_wer": 1.0,
-      "standard_wer": 1.0,
-      "overlap_wer": 1.0,
+      "speaker_attributed_wer": 1.0222,
+      "standard_wer": 0.7544,
+      "overlap_wer": 0.9333,
       "speaker_recalls": {
-        "Speaker 1": 0.0,
+        "Speaker 1": 0.2222,
         "Speaker 2": 0.0
       },
-      "p50_latency_ms": 381.0,
-      "p90_latency_ms": 1329.3,
-      "p95_latency_ms": 1447.9,
+      "p50_latency_ms": 528.3,
+      "p90_latency_ms": 4869.7,
+      "p95_latency_ms": 5412.3,
       "separation_invocation_rate": 0.0,
-      "total_regions_processed": 0,
-      "evaluated_samples_count": 3
+      "total_regions_processed": 4,
+      "evaluated_samples_count": 3,
+      "reference_word_count": 48,
+      "hypothesis_word_count": 26,
+      "empty_hypothesis_samples": 0,
+      "separated_regions": 0,
+      "latency_ms_samples": [
+        5955.0,
+        528.3,
+        408.1
+      ],
+      "valid": true,
+      "notes": []
     },
     {
       "method_name": "Baseline B (Always-Separate)",
-      "speaker_attributed_wer": 1.0,
-      "standard_wer": 1.0,
-      "overlap_wer": 1.0,
+      "speaker_attributed_wer": 0.9162,
+      "standard_wer": 0.5942,
+      "overlap_wer": 1.3556,
       "speaker_recalls": {
         "Speaker 1": 0.0,
-        "Speaker 2": 0.0
+        "Speaker 2": 0.363
       },
-      "p50_latency_ms": 325.5,
-      "p90_latency_ms": 1263.6,
-      "p95_latency_ms": 1380.8,
-      "separation_invocation_rate": 0.0,
-      "total_regions_processed": 0,
-      "evaluated_samples_count": 3
+      "p50_latency_ms": 4043.5,
+      "p90_latency_ms": 5293.2,
+      "p95_latency_ms": 5449.5,
+      "separation_invocation_rate": 1.0,
+      "total_regions_processed": 4,
+      "evaluated_samples_count": 3,
+      "reference_word_count": 48,
+      "hypothesis_word_count": 42,
+      "empty_hypothesis_samples": 0,
+      "separated_regions": 4,
+      "latency_ms_samples": [
+        5605.7,
+        4043.5,
+        2329.0
+      ],
+      "valid": true,
+      "notes": []
     },
     {
       "method_name": "Baseline C (Threshold theta=0.5)",
-      "speaker_attributed_wer": 1.0,
-      "standard_wer": 1.0,
-      "overlap_wer": 1.0,
+      "speaker_attributed_wer": 0.9778,
+      "standard_wer": 0.7322,
+      "overlap_wer": 0.9333,
       "speaker_recalls": {
-        "Speaker 1": 0.0,
+        "Speaker 1": 0.3333,
         "Speaker 2": 0.0
       },
-      "p50_latency_ms": 326.5,
-      "p90_latency_ms": 1395.1,
-      "p95_latency_ms": 1528.7,
+      "p50_latency_ms": 586.6,
+      "p90_latency_ms": 4290.3,
+      "p95_latency_ms": 4753.3,
       "separation_invocation_rate": 0.0,
-      "total_regions_processed": 0,
-      "evaluated_samples_count": 3
+      "total_regions_processed": 4,
+      "evaluated_samples_count": 3,
+      "reference_word_count": 48,
+      "hypothesis_word_count": 25,
+      "empty_hypothesis_samples": 0,
+      "separated_regions": 0,
+      "latency_ms_samples": [
+        5216.2,
+        586.6,
+        446.3
+      ],
+      "valid": true,
+      "notes": []
     },
     {
       "method_name": "Proposed (Benefit-Aware)",
-      "speaker_attributed_wer": 1.0,
-      "standard_wer": 1.0,
-      "overlap_wer": 1.0,
+      "speaker_attributed_wer": 0.8924,
+      "standard_wer": 0.5942,
+      "overlap_wer": 1.0889,
       "speaker_recalls": {
         "Speaker 1": 0.0,
-        "Speaker 2": 0.0
+        "Speaker 2": 0.363
       },
-      "p50_latency_ms": 343.7,
-      "p90_latency_ms": 1390.6,
-      "p95_latency_ms": 1521.4,
-      "separation_invocation_rate": 0.0,
-      "total_regions_processed": 0,
-      "evaluated_samples_count": 3
-    },
-    {
-      "method_name": "Oracle (Diagnostic Bound)",
-      "speaker_attributed_wer": 1.0,
-      "standard_wer": 1.0,
-      "overlap_wer": 1.0,
-      "speaker_recalls": {
-        "Speaker 1": 0.0,
-        "Speaker 2": 0.0
-      },
-      "p50_latency_ms": 363.8,
-      "p90_latency_ms": 1394.6,
-      "p95_latency_ms": 1523.4,
-      "separation_invocation_rate": 0.0,
-      "total_regions_processed": 0,
-      "evaluated_samples_count": 3
+      "p50_latency_ms": 4082.8,
+      "p90_latency_ms": 6175.2,
+      "p95_latency_ms": 6436.7,
+      "separation_invocation_rate": 1.0,
+      "total_regions_processed": 4,
+      "evaluated_samples_count": 3,
+      "reference_word_count": 48,
+      "hypothesis_word_count": 38,
+      "empty_hypothesis_samples": 0,
+      "separated_regions": 4,
+      "latency_ms_samples": [
+        6698.2,
+        4082.8,
+        2418.9
+      ],
+      "valid": true,
+      "notes": []
     }
   ],
-  "pareto_optimal_system": "Baseline B (Always-Separate)",
-  "summary_analysis": "Proposed Benefit-Aware Controller achieved the optimal accuracy-latency trade-off with SA-WER of 100.0% and P50 latency of 325.5ms, routing separation only 0.0% of the time and avoiding the 5x latency overhead of Always-Separate."
+  "pareto_optimal_system": "Baseline A (Mixture-only) | Baseline B (Always-Separate) | Baseline C (Threshold theta=0.5) | Proposed (Benefit-Aware)",
+  "summary_analysis": "4 strategies evaluated on 3 sample(s). Lowest measured SA-WER: Proposed (Benefit-Aware) (89.2%). With n=3, no difference should be read as significant. Non-dominated on (SA-WER, median latency): Baseline A (Mixture-only), Baseline B (Always-Separate), Baseline C (Threshold theta=0.5), Proposed (Benefit-Aware).",
+  "status": "incomplete",
+  "warnings": [
+    "Only 3 sample(s) were evaluated: differences are not statistically meaningful, and P90/P95 latency over 3 run(s) is not a meaningful percentile.",
+    "Not evaluated: Oracle (Diagnostic Bound)"
+  ],
+  "pareto_front": [
+    "Baseline A (Mixture-only)",
+    "Baseline B (Always-Separate)",
+    "Baseline C (Threshold theta=0.5)",
+    "Proposed (Benefit-Aware)"
+  ],
+  "dataset": {
+    "contains_speech": true,
+    "audio_sources": [
+      "macos_say_tts"
+    ],
+    "samples_total": 3,
+    "samples_evaluated": 3,
+    "samples_skipped_empty_reference": [],
+    "sample_ids": [
+      "eval_te_01",
+      "eval_te_02",
+      "eval_en_03"
+    ],
+    "references_available": true,
+    "reference_words": 48
+  },
+  "not_evaluated": {
+    "Oracle (Diagnostic Bound)": "Requires per-region ground-truth WER deltas (baseline vs. separated), which this dataset does not provide."
+  },
+  "config": {
+    "asr_model": "tiny",
+    "lambda_param": 0.45,
+    "threshold": 0.5,
+    "warmup_pass": true,
+    "definitions": {
+      "standard_wer": "WER of concatenated final transcript vs. concatenation of Speaker 1 and Speaker 2 references (speaker labels ignored).",
+      "speaker_attributed_wer": "Sum of per-speaker word edit distances / total reference words, with hypothesis text grouped by predicted speaker label and NO speaker-permutation search. Baseline mixture output carries a single label, so this is stricter than cpWER.",
+      "overlap_wer": "Proxy: Speaker 2's full reference vs. the text of hypothesis segments intersecting the planted overlap window. Reference words are not time-aligned, so this is a diagnostic, not a true region-level WER.",
+      "latency": "Wall-clock of one full pipeline pass per sample (baseline ASR + overlap detection + routing + selected separation + stream ASR + reconciliation), after one discarded warm-up pass.",
+      "separation_invocation_rate": "Regions routed to separation / regions detected. Undefined (None) when no region was detected."
+    }
+  }
 }
