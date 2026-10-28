@@ -268,29 +268,23 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
         </div>
 
-        {/* TRUSTED BY / PARTNERS BAR */}
+        {/* LOGO STRIP: same pattern as Parley's "Trusted by" row, monochrome mark + wordmark */}
         <div className="parley-partners-bar">
-          <p className="parley-partners-label">Built on open research tools</p>
-          <div className="parley-partners-grid">
-            <div className="parley-partner-item">
-              <span className="partner-name">PyTorch 2.x</span>
-            </div>
-            <div className="parley-partner-item">
-              <span className="partner-name">faster-whisper</span>
-            </div>
-            <div className="parley-partner-item">
-              <span className="partner-name">Torchaudio</span>
-            </div>
-            <div className="parley-partner-item">
-              <span className="partner-name">FastAPI</span>
-            </div>
-            <div className="parley-partner-item">
-              <span className="partner-name">Hugging Face</span>
-            </div>
-            <div className="parley-partner-item">
-              <span className="partner-name">React 19</span>
-            </div>
-          </div>
+          <p className="parley-partners-label">Built on open tools. Designed for overlapping speech.</p>
+          <ul className="parley-partners-grid" aria-label="Open tools Routone is built on">
+            {[
+              ['PyTorch', 'pytorch'],
+              ['Hugging Face', 'huggingface'],
+              ['Whisper', 'openai'],
+              ['FFmpeg', 'ffmpeg'],
+              ['FastAPI', 'fastapi'],
+            ].map(([name, icon]) => (
+              <li className="parley-partner-item" key={name}>
+                <span className="partner-icon" style={{ ['--icon' as string]: `url(/logos/${icon}.svg)` }} aria-hidden="true" />
+                <span className="partner-name">{name}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
