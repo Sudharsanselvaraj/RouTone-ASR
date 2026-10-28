@@ -71,11 +71,9 @@
 }
 
 .parley-logo-mark {
-  width: 32px;
+  width: auto;
   height: 32px;
-  border-radius: 8px;
-  background: var(--parley-orange);
-  color: #ffffff;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
