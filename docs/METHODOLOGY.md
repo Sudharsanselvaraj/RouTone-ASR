@@ -1,4 +1,4 @@
-# OverlapWeave: Mathematical Methodology & Formulations
+# Routone: Mathematical Methodology & Formulations
 
 ## 1. Problem Formulation
 In conversational automatic speech recognition (ASR), multi-talker overlap occurs when two or more distinct acoustic sources $s_1(t)$ and $s_2(t)$ are active concurrently over a time interval $t \in [t_{start}, t_{end}]$. The single-channel observed signal is modeled as:
@@ -18,7 +18,7 @@ $$R_x(\tau) = \frac{\sum_{n} x[n] x[n+\tau]}{\sqrt{\sum_n x^2[n] \sum_n x^2[n+\t
 
 When two speakers with fundamental frequencies $F_{0,1} \neq F_{0,2}$ talk simultaneously, incommensurate periodicities produce competing secondary autocorrelation peaks at lags $\tau_1 = 1/F_{0,1}$ and $\tau_2 = 1/F_{0,2}$.
 
-OverlapWeave identifies candidate peaks $\mathcal{P} = \{(\tau_k, R_x(\tau_k))\}$ in the human pitch search interval $\tau \in [2.5\text{ms}, 12.5\text{ms}]$ (corresponding to 80 Hz to 400 Hz). Subharmonic octave multiples satisfying:
+Routone identifies candidate peaks $\mathcal{P} = \{(\tau_k, R_x(\tau_k))\}$ in the human pitch search interval $\tau \in [2.5\text{ms}, 12.5\text{ms}]$ (corresponding to 80 Hz to 400 Hz). Subharmonic octave multiples satisfying:
 
 $$\left|\frac{\max(\tau_1, \tau_2)}{\min(\tau_1, \tau_2)} - k\right| < 0.12, \quad k \in \{2, 3\}$$
 
