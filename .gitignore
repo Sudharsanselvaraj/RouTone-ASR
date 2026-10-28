@@ -63,3 +63,8 @@ htmlcov/
 # OS Specific
 .DS_Store
 Thumbs.db
+
+# Routone runtime data
+data/runs/
+data/tts_cache/
+results/history/
