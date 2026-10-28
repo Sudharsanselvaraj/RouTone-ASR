@@ -23,15 +23,19 @@ class EvaluationMetrics:
 
     @classmethod
     def compute_standard_wer(cls, reference: str, hypothesis: str) -> float:
-        """Computes Word Error Rate between reference and hypothesis text."""
+        """Computes Word Error Rate between reference and hypothesis text.
+
+        Raises:
+            ValueError: If the reference is empty. WER is undefined without reference words; returning a
+                number (0.0 or 1.0) would silently produce a misleading score.
+        """
         ref_clean = cls.normalize_text(reference)
         hyp_clean = cls.normalize_text(hypothesis)
 
-        if not ref_clean and not hyp_clean:
-            return 0.0
-        if not ref_clean and hyp_clean:
-            return 1.0
-        if ref_clean and not hyp_clean:
+        if not ref_clean:
+            raise ValueError("WER is undefined for an empty reference transcript.")
+        if not hyp_clean:
+            # Every reference word is a deletion: WER is exactly 1.0 (callers should flag empty hypotheses).
             return 1.0
 
         try:
@@ -85,8 +89,7 @@ class EvaluationMetrics:
             total_ref_words += ref_count
 
             if ref_count == 0:
-                per_speaker_wer[spk] = 0.0
-                per_speaker_recall[spk] = 1.0
+                # No reference for this speaker: their WER/recall are unavailable, not perfect.
                 continue
 
             dist = cls._word_levenshtein_distance(ref_words, hyp_words)
@@ -101,7 +104,9 @@ class EvaluationMetrics:
             recall = min(1.0, float(matched / ref_count))
             per_speaker_recall[spk] = round(recall, 4)
 
-        overall_sa_wer = round(min(2.0, float(total_errors / max(1, total_ref_words))), 4)
+        if total_ref_words == 0:
+            raise ValueError("SA-WER is undefined: no speaker has any reference words.")
+        overall_sa_wer = round(min(2.0, float(total_errors / total_ref_words)), 4)
         return overall_sa_wer, per_speaker_wer, per_speaker_recall
 
     @classmethod
@@ -145,6 +150,26 @@ class EvaluationMetrics:
                     )
 
         return dp[n][m]
+
+    @classmethod
+    def count_words(cls, text: str) -> int:
+        return len(cls.normalize_text(text).split())
+
+    @staticmethod
+    def pareto_front(points: Dict[str, Tuple[float, float]]) -> List[str]:
+        """Names whose (error, latency) point is not dominated by any other point (both minimized).
+
+        A point dominates another if it is <= in both coordinates and < in at least one.
+        """
+        front: List[str] = []
+        for name, (err, lat) in points.items():
+            dominated = any(
+                (e2 <= err and l2 <= lat) and (e2 < err or l2 < lat)
+                for other, (e2, l2) in points.items() if other != name
+            )
+            if not dominated:
+                front.append(name)
+        return front
 
     @staticmethod
     def compute_latency_percentiles(latencies_ms: List[float]) -> Tuple[float, float, float]:
