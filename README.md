@@ -31,7 +31,7 @@ Speech separation is selectively routed only when predicted utility is positive 
 ```
 +-----------------------------------------------------------------------------------+
 |                                 CLIENT LAYER                                      |
-|  (React 18 + Vite + TypeScript + Custom Dark Theme + Web Audio + Canvas Waveform) |
+|  (React 18 + Vite + TypeScript + Clean Light Theme + Web Audio + Canvas Waveform) |
 |  - ASR Studio        - Overlap Inspector    - Routing Lab       - Benchmarks      |
 +------------------------------------------+----------------------------------------+
                                            | HTTP / REST (Multipart Audio, JSON)
@@ -231,12 +231,13 @@ tests/integration/test_api.py::test_api_sample_audio PASSED
 tests/integration/test_api.py::test_api_overlap_endpoint PASSED
 tests/integration/test_pipeline_e2e.py::test_pipeline_e2e_synthetic_sample PASSED
 tests/unit/test_audio_processor.py::test_audio_processor_valid_wav PASSED
+tests/unit/test_audio_processor.py::test_audio_processor_webm_opus PASSED
 tests/unit/test_metrics.py::test_speaker_attributed_wer PASSED
 tests/unit/test_overlap_detector.py::test_overlap_detector_clashing_dual_tones PASSED
 tests/unit/test_reconciliation.py::test_reconciliation_merge_and_sort PASSED
 tests/unit/test_routing_controller.py::test_benefit_aware_controller PASSED
 ...
-============================== 22 passed in 2.62s ==============================
+============================== 23 passed in 3.58s ==============================
 ```
 
 ---
