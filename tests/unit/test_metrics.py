@@ -1,8 +1,8 @@
 """Unit tests for evaluation metrics (SA-WER, standard WER, latency percentiles)."""
 
 import pytest
-from overlapweave.schemas.models import TranscriptSegment
-from overlapweave.evaluation.metrics import EvaluationMetrics
+from routone.schemas.models import TranscriptSegment
+from routone.evaluation.metrics import EvaluationMetrics
 
 
 def test_standard_wer():
