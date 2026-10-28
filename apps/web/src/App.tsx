@@ -21,11 +21,12 @@ import {
   Info
 } from 'lucide-react';
 import type { PipelineResult, BenchmarkReport } from './types';
+import LandingPage from './components/LandingPage';
 
 const API_BASE = 'http://localhost:8000';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'studio' | 'inspector' | 'routing' | 'benchmarks'>('studio');
+  const [activeTab, setActiveTab] = useState<'landing' | 'studio' | 'inspector' | 'routing' | 'benchmarks'>('landing');
   const [health, setHealth] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -373,6 +374,24 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
+  // Navigate from Landing Page
+  const handleLandingNavigate = (tab: 'studio' | 'inspector' | 'routing' | 'benchmarks', preset?: 'overlap' | 'clean' | 'cs') => {
+    setActiveTab(tab);
+    if (tab === 'studio' && preset) {
+      loadPresetSample(preset);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (activeTab === 'landing') {
+    return (
+      <>
+        {audioUrl && <audio ref={audioRef} src={audioUrl} />}
+        <LandingPage onNavigate={handleLandingNavigate} />
+      </>
+    );
+  }
+
   return (
     <div className="app-container">
       {/* Hidden native audio element */}
@@ -380,7 +399,7 @@ export default function App() {
 
       {/* Global Application Header */}
       <header className="app-header">
-        <div className="brand-section">
+        <div className="brand-section" onClick={() => setActiveTab('landing')} style={{ cursor: 'pointer' }} title="Return to Overview">
           <div className="brand-logo">OW</div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -392,6 +411,12 @@ export default function App() {
 
         {/* Center Tabs Navigation */}
         <nav className="tabs-nav">
+          <button
+            className="tab-btn"
+            onClick={() => setActiveTab('landing')}
+          >
+            Overview
+          </button>
           <button
             className={`tab-btn ${activeTab === 'studio' ? 'active' : ''}`}
             onClick={() => setActiveTab('studio')}
