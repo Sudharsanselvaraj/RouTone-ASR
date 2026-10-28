@@ -265,7 +265,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 3. WHY OVERLAPWEAVE SECTION — EXPANDABLE FEATURE CARDS */}
+      {/* 3. WHY ROUTONE SECTION — EXPANDABLE FEATURE CARDS */}
       <section id="why-weave" className="parley-section">
         <div className="parley-section-header">
           <div>
@@ -821,7 +821,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <h5 className="footer-col-title">Research &amp; Docs</h5>
                 <ul>
                   <li><button onClick={() => onNavigate('benchmarks')} className="footer-link">SA-WER Metric</button></li>
-                  <li><a href="https://github.com/overlapweave/overlapweave" target="_blank" rel="noreferrer" className="footer-link">GitHub Repository</a></li>
+                  <li><a href="https://github.com/Sudharsanselvaraj/RouTone-ASR" target="_blank" rel="noreferrer" className="footer-link">GitHub Repository</a></li>
                   <li><a href="/README.md" className="footer-link">Implementation Plan</a></li>
                   <li><a href="/SPEC.md" className="footer-link">Project Specification</a></li>
                 </ul>
