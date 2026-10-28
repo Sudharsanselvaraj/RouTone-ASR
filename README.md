@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="apps/web/public/brand/routone-logo-dark.png">
     <source media="(prefers-color-scheme: light)" srcset="apps/web/public/brand/routone-logo-light.png">
-    <img alt="RouTone — Adaptive routing for overlapping speech recognition." src="apps/web/public/brand/routone-logo-light.png" width="640">
+    <img alt="RouTone — Adaptive routing for overlapping speech recognition." src="apps/web/public/brand/routone-logo-light.png" width="440">
   </picture>
 </p>
 
@@ -70,8 +70,6 @@ faster-whisper · ConvTasNet (torchaudio) · PyTorch · FastAPI · React 19 · V
 ## Docs
 
 [Architecture](docs/ARCHITECTURE.md) · [Methodology](docs/METHODOLOGY.md) · [Experiments](docs/EXPERIMENTS.md) · [Benchmark audit](docs/BENCHMARK_AUDIT.md) · [Spec](SPEC.md)
-
-The Python package and API paths keep the internal name `overlapweave`.
 
 ## License
 
