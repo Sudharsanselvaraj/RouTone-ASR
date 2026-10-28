@@ -2,7 +2,7 @@
 
 import numpy as np
 import pytest
-from overlapweave.overlap.detector import OverlapDetector
+from routone.overlap.detector import OverlapDetector
 
 
 def test_overlap_detector_silence():
