@@ -11,7 +11,8 @@ import type {
   RunSummary,
 } from './types';
 
-export const API_BASE = import.meta.env.VITE_API_BASE ?? 'http://localhost:8000';
+// An empty VITE_API_BASE (e.g. an unset CI variable) must fall back to the local default.
+export const API_BASE: string = (import.meta.env.VITE_API_BASE as string | undefined)?.replace(/\/+$/, '') || 'http://localhost:8000';
 
 export class ApiError extends Error {
   status: number;
