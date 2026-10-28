@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useWorkbench } from '../state/store';
 import { WordmarkMark } from './ui';
 import { TechMarquee } from './TechMarquee';
+import { FeatureCards } from './FeatureCards';
 import {
   ChevronRight,
   ArrowUpRight,
@@ -21,7 +22,7 @@ function useReveal() {
     if (!root) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const targets = [...root.querySelectorAll<HTMLElement>(
-      '.parley-section-header, .parley-cards-flex-row, .parley-workflow-showcase, .tech-marquee, .parley-metric-card, .parley-bench-cta-wrap, .parley-banner-content, .parley-footer-top',
+      '.parley-section-header, .fc-row, .parley-workflow-showcase, .tech-marquee, .parley-metric-card, .parley-bench-cta-wrap, .parley-banner-content, .parley-footer-top',
     )];
     if (reduce || !('IntersectionObserver' in window)) return;
     targets.forEach((t, i) => {
@@ -49,86 +50,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
   const bench = wb.benchmark;
   const rootRef = useReveal();
 
-  // Feature cards active index (0: Mixture ASR, 1: Overlap Detection, 2: Benefit Routing, 3: Measured Evaluation)
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-
   // Capability showcase workflow index
   const [activeWorkflowIndex, setActiveWorkflowIndex] = useState(0);
-
-  const featureCards = [
-    {
-      id: 'mixture',
-      num: '01.',
-      title: 'Mixture-first ASR',
-      inactiveDesc: 'Transcribe the original recording first before deciding whether separation is needed.',
-      activeDesc: 'Obtains baseline word timestamps and token-level acoustic confidence directly on the unseparated audio, preventing unnecessary compute on clean speech.',
-      preview: {
-        tag: 'Baseline Mixture Engine',
-        headline: 'faster-whisper int8 · 16 kHz Mono',
-        details: [
-          { label: 'Segment confidence', val: 'per segment' },
-          { label: 'Token log-likelihood', val: 'per segment' },
-          { label: 'Language', val: 'auto-detected' }
-        ],
-        badge: 'Illustrative layout',
-        snippet: '"வணக்கம், let us begin the project status review..."'
-      }
-    },
-    {
-      id: 'overlap',
-      num: '02.',
-      title: 'Overlap detection',
-      inactiveDesc: 'Identify portions of the recording that contain simultaneously active speakers.',
-      activeDesc: 'Tracks fundamental frequencies (F0) and harmonic clash indices (C_harm) with subharmonic octave suppression to isolate dual-talker collision spans.',
-      preview: {
-        tag: 'Harmonic Clash Front-End',
-        headline: 'Dual-Pitch Collision Interval',
-        details: [
-          { label: 'Pitch clash index', val: 'per region' },
-          { label: 'Overlap score', val: 'per region (heuristic)' },
-          { label: 'Speaker count', val: 'fixed default of 2' }
-        ],
-        badge: 'Illustrative layout',
-        snippet: 'Candidate regions are flagged by a heuristic detector'
-      }
-    },
-    {
-      id: 'routing',
-      num: '03.',
-      title: 'Benefit-aware routing',
-      inactiveDesc: 'Estimate whether separating a selected region is likely to improve recognition enough to justify additional processing cost.',
-      activeDesc: 'Computes a heuristic utility U = predicted benefit − λ·cost for each region. Only regions where it clears a margin are routed to Conv-TasNet.',
-      preview: {
-        tag: 'Decision Controller',
-        headline: 'Net Utility U = E[ΔAcc] - λ·Cost',
-        details: [
-          { label: 'Predicted benefit', val: 'heuristic' },
-          { label: 'Cost estimate', val: 'normalized' },
-          { label: 'Utility', val: 'benefit − λ·cost' }
-        ],
-        badge: 'Illustrative layout',
-        snippet: 'Each decision shows its evidence and explanation'
-      }
-    },
-    {
-      id: 'evaluation',
-      num: '04.',
-      title: 'Measured evaluation',
-      inactiveDesc: 'Compare speaker-attributed recognition accuracy, latency and separation overhead against baseline methods.',
-      activeDesc: 'Reports WER, speaker-attributed WER and latency percentiles for each strategy, and states plainly when an experiment is too small or invalid to conclude anything.',
-      preview: {
-        tag: 'Empirical Benchmark',
-        headline: 'SA-WER Alignment & Latency',
-        details: [
-          { label: 'SA-WER', val: 'per strategy' },
-          { label: 'Latency', val: 'median / P95' },
-          { label: 'Separation rate', val: 'per strategy' }
-        ],
-        badge: 'Illustrative layout',
-        snippet: 'Results appear only from real experiment runs'
-      }
-    }
-  ];
 
   const workflows = [
     {
@@ -304,111 +227,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </p>
         </div>
 
-        {/* EXPANDABLE 4-CARD FLEX ROW MATCHING PARLEY FRAMER */}
-        <div className="parley-cards-flex-row" role="region" aria-label="Feature Architecture Cards">
-          {featureCards.map((card, idx) => {
-            const isActive = activeCardIndex === idx;
-            return (
-              <div
-                key={card.id}
-                tabIndex={0}
-                role="button"
-                aria-pressed={isActive}
-                onMouseEnter={() => setActiveCardIndex(idx)}
-                onFocus={() => setActiveCardIndex(idx)}
-                onClick={() => setActiveCardIndex(idx)}
-                className={`parley-flex-card ${isActive ? 'is-active' : 'is-inactive'}`}
-              >
-                {/* INACTIVE STATE CONTENT */}
-                {!isActive && (
-                  <div className="card-inactive-inner">
-                    <div className="card-inactive-top">
-                      <span className="card-inactive-watermark">{card.num}</span>
-                      {/* Geometric square motifs matching Parley reference */}
-                      {idx === 0 && (
-                        <div className="inactive-motif motif-grid-2x2">
-                          <span className="sq s1"></span>
-                          <span className="sq s2"></span>
-                          <span className="sq s3"></span>
-                          <span className="sq s4"></span>
-                        </div>
-                      )}
-                      {idx === 1 && (
-                        <div className="inactive-motif motif-grid-3x2">
-                          <span className="sq s1"></span>
-                          <span className="sq s2"></span>
-                          <span className="sq s3"></span>
-                          <span className="sq s4"></span>
-                          <span className="sq s5"></span>
-                          <span className="sq s6"></span>
-                        </div>
-                      )}
-                      {idx === 2 && (
-                        <div className="inactive-motif motif-row-5">
-                          <span className="dot d1"></span>
-                          <span className="dot d2"></span>
-                          <span className="dot d3"></span>
-                          <span className="dot d4"></span>
-                          <span className="dot d5"></span>
-                        </div>
-                      )}
-                      {idx === 3 && (
-                        <div className="inactive-motif motif-scatter-6">
-                          <span className="sq s1"></span>
-                          <span className="sq s2"></span>
-                          <span className="sq s3"></span>
-                          <span className="sq s4"></span>
-                          <span className="sq s5"></span>
-                          <span className="sq s6"></span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="card-inactive-bottom">
-                      <h3 className="card-inactive-title">{card.title}</h3>
-                      <p className="card-inactive-desc">{card.inactiveDesc}</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* ACTIVE STATE CONTENT WITH DEDICATED PREVIEW */}
-                {isActive && (
-                  <div className="card-active-inner">
-                    <div className="card-active-preview">
-                      <div className="preview-header-row">
-                        <span className="preview-tag">{card.preview.tag}</span>
-                        <span className="preview-badge">{card.preview.badge}</span>
-                      </div>
-                      <div className="preview-headline">{card.preview.headline}</div>
-                      
-                      <div className="preview-metrics-grid">
-                        {card.preview.details.map((d, dIdx) => (
-                          <div key={dIdx} className="preview-metric-item">
-                            <span className="metric-lbl">{d.label}</span>
-                            <span className="metric-num">{d.val}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="preview-snippet-box">
-                        <span className="snippet-icon">probe &gt;</span>
-                        <span className="snippet-text">{card.preview.snippet}</span>
-                      </div>
-                    </div>
-
-                    <div className="card-active-body">
-                      <div className="card-active-title-row">
-                        <span className="card-active-num">{card.num}</span>
-                        <h3 className="card-active-title">{card.title}</h3>
-                      </div>
-                      <p className="card-active-desc">{card.activeDesc}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <FeatureCards />
       </section>
 
       {/* 4. INTELLIGENT DELEGATION / INTERACTIVE WORKFLOW SHOWCASE */}
