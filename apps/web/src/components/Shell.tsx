@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { BarChart3, Cpu, Keyboard, Layers, LayoutGrid, Menu, Mic2, X, ArrowUpRight } from 'lucide-react';
 import { useWorkbench } from '../state/store';
+import { API_BASE } from '../api';
 import type { View } from '../state/store';
 import { Banner, Wordmark } from './ui';
 import { StatusPanel } from './StatusPanel';
@@ -14,6 +15,7 @@ const NAV: { id: Exclude<View, 'landing'>; label: string; icon: ReactNode }[] = 
   { id: 'benchmarks', label: 'Benchmarks', icon: <BarChart3 size={16} /> },
 ];
 
+const REMOTE_API = !/^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/.test(API_BASE);
 const HOSTED = !['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
 
 export function Shell({ children }: { children: ReactNode }) {
@@ -74,9 +76,13 @@ export function Shell({ children }: { children: ReactNode }) {
         {busy && <div className="progress-line" aria-hidden="true" />}
         {wb.backend === 'offline' && (
           <Banner tone="amber" title="Backend not reachable">
-            {HOSTED ? (
+            {REMOTE_API ? (
               <>
-                This is the hosted interface; it has no server of its own. To transcribe or evaluate, run the API on your machine
+                The Routone API at <code>{API_BASE}</code> isn’t responding. If it was idle it may be waking up; wait a minute and reload.
+              </>
+            ) : HOSTED ? (
+              <>
+                This is the hosted interface and no server is configured for it. To transcribe or evaluate, run the API on your machine
                 (<code>make server</code>) and reload this page. It connects to <code>localhost:8000</code> from Chrome, Edge or Firefox.
               </>
             ) : (
