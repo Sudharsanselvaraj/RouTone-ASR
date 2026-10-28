@@ -2,7 +2,7 @@
 
 ## 1. Software Components & Open-Source Licenses
 
-| Component | Repository / Provider | License | Purpose in OverlapWeave |
+| Component | Repository / Provider | License | Purpose in Routone |
 |---|---|---|---|
 | **PyTorch & Torchaudio** | PyTorch Foundation | Modified BSD | Deep learning runtime & audio tensor operations |
 | **Conv-TasNet Libri2Mix** | torchaudio pipeline / Libri2Mix | CC BY 4.0 / BSD | Pretrained 2-source speech separation bundle |
@@ -32,6 +32,6 @@
 ---
 
 ## 3. Data Provenance & Ethics
-- **Synthetic Mixture Construction:** OverlapWeave utilizes synthetic controlled mixtures generated from licensed open datasets (e.g. LibriSpeech under CC BY 4.0 and open Tamil speech samples) where isolated source stems are known.
+- **Synthetic Mixture Construction:** Routone utilizes synthetic controlled mixtures generated from licensed open datasets (e.g. LibriSpeech under CC BY 4.0 and open Tamil speech samples) where isolated source stems are known.
 - **Privacy & PII:** No private recordings, unconsented conversational intercepts, or proprietary commercial datasets are bundled with this repository.
 - **Fair Use:** All evaluations conducted comply with academic research guidelines and reproducibility standards.
