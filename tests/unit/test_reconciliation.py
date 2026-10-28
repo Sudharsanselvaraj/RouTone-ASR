@@ -1,12 +1,12 @@
 """Unit tests for CandidateReconciler."""
 
 import pytest
-from overlapweave.schemas.models import (
+from routone.schemas.models import (
     TranscriptSegment,
     RoutingDecision,
     RoutingMode,
 )
-from overlapweave.reconciliation.reconciler import CandidateReconciler
+from routone.reconciliation.reconciler import CandidateReconciler
 
 
 def test_reconciliation_merge_and_sort():
