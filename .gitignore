@@ -68,3 +68,6 @@ Thumbs.db
 data/runs/
 data/tts_cache/
 results/history/
+
+# Local tooling
+.claude/
