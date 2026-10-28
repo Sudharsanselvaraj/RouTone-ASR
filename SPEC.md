@@ -1,13 +1,13 @@
-# SPEC.md: OverlapWeave Technical Specification
+# SPEC.md: Routone Technical Specification
 
 ## 1. System Identity and Vision
-**System Name:** OverlapWeave  
+**System Name:** Routone  
 **Subtitle:** Benefit-Aware Adaptive Speech Separation for Speaker-Attributed ASR in Overlapping Tamil–English Conversations  
 
 ### Objective
 In natural multi-party conversations—especially code-switching multilingual settings like Tamil–English (Tanglish)—speakers regularly overlap (interrupt, agree, backchannel, talk concurrently). Standard ASR backends (e.g. Whisper) omit interleaved voices, mix up word order, or drop words from the secondary speaker. Blindly executing deep speech separation across every audio clip is computationally expensive (~5–10x latency overhead) and often introduces audible non-linear distortions that can degrade ASR on clear, non-overlapping regions.
 
-OverlapWeave solves this by introducing a **Benefit-Aware Adaptive Separation Controller**. The controller analyzes short acoustic and transcription cues from candidate overlap regions and estimates the expected utility:
+Routone solves this by introducing a **Benefit-Aware Adaptive Separation Controller**. The controller analyzes short acoustic and transcription cues from candidate overlap regions and estimates the expected utility:
 $$\text{utility} = \Delta \text{Accuracy} - \lambda \cdot \text{Normalized Additional Cost}$$
 Speech separation is selectively routed only when the predicted recognition benefit outweighs the latency penalty.
 
