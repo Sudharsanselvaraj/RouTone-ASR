@@ -26,7 +26,9 @@
 
 .brand { background: none; border: 0; padding: 0; text-align: left; }
 .wordmark { display: inline-flex; align-items: center; gap: 9px; color: var(--ink); }
-.wordmark-text { font-family: var(--font-serif); font-size: 21px; font-weight: 500; letter-spacing: -0.01em; }
+.wordmark-mark { display: block; height: 22px; width: auto; }
+.wordmark-text { font-family: var(--font-ui); font-size: 19px; font-weight: 700; letter-spacing: -0.02em; }
+.wordmark-text b { font-weight: 700; color: var(--accent-ink); }
 
 .nav { display: flex; flex-direction: column; gap: 2px; }
 .nav-item {
