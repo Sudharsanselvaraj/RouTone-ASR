@@ -3,9 +3,9 @@
 import numpy as np
 import pytest
 
-from overlapweave.schemas.models import TranscriptSegment
-from overlapweave.evaluation.metrics import EvaluationMetrics
-from overlapweave.evaluation.harness import BenchmarkHarness
+from routone.schemas.models import TranscriptSegment
+from routone.evaluation.metrics import EvaluationMetrics
+from routone.evaluation.harness import BenchmarkHarness
 
 
 def test_wer_empty_reference_is_undefined_not_zero():
@@ -42,7 +42,7 @@ def test_pareto_front():
 
 def test_tone_dataset_is_reported_invalid():
     """Harmonic-tone mixtures contain no speech; the report must say so instead of scoring them."""
-    from overlapweave.evaluation.synthetic_generator import SyntheticDatasetGenerator
+    from routone.evaluation.synthetic_generator import SyntheticDatasetGenerator
     samples = SyntheticDatasetGenerator.get_dataset("test")[:1]
     report = BenchmarkHarness(output_dir="/tmp/routone_test_bench").run_benchmark(
         samples=samples, save_results=False, dataset_name="tone test"
@@ -57,7 +57,7 @@ def test_tone_dataset_is_reported_invalid():
 
 
 def test_separation_rate_undefined_without_regions():
-    from overlapweave.evaluation.synthetic_generator import SyntheticDatasetGenerator
+    from routone.evaluation.synthetic_generator import SyntheticDatasetGenerator
     samples = SyntheticDatasetGenerator.get_dataset("test")[:1]
     report = BenchmarkHarness(output_dir="/tmp/routone_test_bench").run_benchmark(
         samples=samples, save_results=False
