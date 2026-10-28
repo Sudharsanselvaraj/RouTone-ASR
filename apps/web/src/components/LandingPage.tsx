@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useWorkbench } from '../state/store';
+import { WordmarkMark } from './ui';
 import {
   ChevronRight,
   ArrowUpRight,
@@ -7,10 +9,13 @@ import {
 } from 'lucide-react';
 
 interface LandingPageProps {
-  onNavigate: (tab: 'studio' | 'inspector' | 'routing' | 'benchmarks', preset?: 'overlap' | 'clean' | 'cs') => void;
+  onNavigate: (tab: 'overview' | 'studio' | 'inspector' | 'routing' | 'benchmarks', preset?: 'overlap' | 'clean') => void;
 }
 
 export default function LandingPage({ onNavigate }: LandingPageProps) {
+  const wb = useWorkbench();
+  const bench = wb.benchmark;
+
   // Feature cards active index (0: Mixture ASR, 1: Overlap Detection, 2: Benefit Routing, 3: Measured Evaluation)
   const [activeCardIndex, setActiveCardIndex] = useState(0);
 
@@ -28,11 +33,11 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         tag: 'Baseline Mixture Engine',
         headline: 'faster-whisper int8 · 16 kHz Mono',
         details: [
-          { label: 'Baseline Confidence', val: '92.4%' },
-          { label: 'Token Log-Likelihood', val: '-0.34 avg' },
-          { label: 'Primary Language', val: 'Tamil / English' }
+          { label: 'Segment confidence', val: 'per segment' },
+          { label: 'Token log-likelihood', val: 'per segment' },
+          { label: 'Language', val: 'auto-detected' }
         ],
-        badge: 'No separation penalty',
+        badge: 'Illustrative layout',
         snippet: '"வணக்கம், let us begin the project status review..."'
       }
     },
@@ -46,12 +51,12 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         tag: 'Harmonic Clash Front-End',
         headline: 'Dual-Pitch Collision Interval',
         details: [
-          { label: 'Clash Score (C_harm)', val: '0.74 > 0.50' },
-          { label: 'Speaker 1 F0', val: '130 Hz (Male)' },
-          { label: 'Speaker 2 F0', val: '220 Hz (Female)' }
+          { label: 'Pitch clash index', val: 'per region' },
+          { label: 'Overlap score', val: 'per region (heuristic)' },
+          { label: 'Speaker count', val: 'fixed default of 2' }
         ],
-        badge: 'Collision flagged: 01.20s – 03.20s',
-        snippet: 'Cross-talk interval detected: 2 active concurrent voices'
+        badge: 'Illustrative layout',
+        snippet: 'Candidate regions are flagged by a heuristic detector'
       }
     },
     {
@@ -59,17 +64,17 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       num: '03.',
       title: 'Benefit-aware routing',
       inactiveDesc: 'Estimate whether separating a selected region is likely to improve recognition enough to justify additional processing cost.',
-      activeDesc: 'Dynamically computes expected recognition utility U = E[ΔAcc] - λ·Cost. Only regions where predicted gain outweighs latency are routed to Conv-TasNet.',
+      activeDesc: 'Computes a heuristic utility U = predicted benefit − λ·cost for each region. Only regions where it clears a margin are routed to Conv-TasNet.',
       preview: {
         tag: 'Decision Controller',
         headline: 'Net Utility U = E[ΔAcc] - λ·Cost',
         details: [
-          { label: 'Predicted ASR Gain', val: '+54.0%' },
-          { label: 'Compute Cost (λ=0.45)', val: '0.16' },
-          { label: 'Calculated Utility', val: '+0.38 > 0' }
+          { label: 'Predicted benefit', val: 'heuristic' },
+          { label: 'Cost estimate', val: 'normalized' },
+          { label: 'Utility', val: 'benefit − λ·cost' }
         ],
-        badge: 'Action: ROUTE_SEPARATION',
-        snippet: 'Separation justified: scheduled on PyTorch MPS engine'
+        badge: 'Illustrative layout',
+        snippet: 'Each decision shows its evidence and explanation'
       }
     },
     {
@@ -77,17 +82,17 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       num: '04.',
       title: 'Measured evaluation',
       inactiveDesc: 'Compare speaker-attributed recognition accuracy, latency and separation overhead against baseline methods.',
-      activeDesc: 'Quantifies speaker-attributed WER (SA-WER), word timestamp precision, and P50 latency percentiles across synthetic and real conversational datasets.',
+      activeDesc: 'Reports WER, speaker-attributed WER and latency percentiles for each strategy, and states plainly when an experiment is too small or invalid to conclude anything.',
       preview: {
         tag: 'Empirical Benchmark',
         headline: 'SA-WER Alignment & Latency',
         details: [
-          { label: 'Proposed SA-WER', val: '27.6%' },
-          { label: 'Latency Speedup', val: '5.8× P50' },
-          { label: 'Separation Invoked', val: '35% of regions' }
+          { label: 'SA-WER', val: 'per strategy' },
+          { label: 'Latency', val: 'median / P95' },
+          { label: 'Separation rate', val: 'per strategy' }
         ],
-        badge: 'Optimal Pareto Front',
-        snippet: 'Saved 65% compute while outperforming always-separate'
+        badge: 'Illustrative layout',
+        snippet: 'Results appear only from real experiment runs'
       }
     }
   ];
@@ -100,10 +105,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       desc: 'Transcribe natural multi-talker audio with faster-whisper int8 to obtain baseline word timestamps, segment bounds, and acoustic confidence scores before routing.',
       taskPrompt: 'transcribe mixture [eval_te_01.wav · 5.2s]',
       steps: [
-        { label: 'Ingest 16 kHz mono waveform', status: 'done', detail: 'Audio length: 5.20s · SNR: 38.2 dB' },
-        { label: 'Run faster-whisper int8 multilingual decode', status: 'done', detail: 'Identified Tamil-English intra-sentential speech' },
-        { label: 'Generate word-level timestamp alignment', status: 'active', detail: 'Detected 14 baseline candidate tokens' },
-        { label: 'Extract average segment logprob (-0.42)', status: 'pending', detail: 'Baseline hypothesis saved for reconciliation' }
+        { label: 'Ingest 16 kHz mono waveform', status: 'done', detail: 'Duration and signal estimates are recorded' },
+        { label: 'Run faster-whisper int8 multilingual decode', status: 'done', detail: 'Language is detected or set manually' },
+        { label: 'Generate word-level timestamp alignment', status: 'active', detail: 'Per-word times and confidences' },
+        { label: 'Extract average segment log-probability', status: 'pending', detail: 'Baseline hypothesis saved for reconciliation' }
       ]
     },
     {
@@ -113,10 +118,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       desc: 'Detect concurrent voiced intervals using multi-pitch tracking, harmonic clash analysis (C_harm), and subharmonic octave filtering to avoid false alarms.',
       taskPrompt: 'detect overlap collisions [region_01]',
       steps: [
-        { label: 'Compute STFT spectrogram & spectral peaks', status: 'done', detail: 'Frame step: 10ms · Window: 32ms Hanning' },
-        { label: 'Filter subharmonic integer multiples (2×, 3× F0)', status: 'done', detail: 'Rejected same-speaker subharmonic false positives' },
-        { label: 'Isolate dual-talker collision window [01.20s – 03.20s]', status: 'active', detail: 'Harmonic clash index: 0.74 > threshold 0.50' },
-        { label: 'Forward candidate region to routing controller', status: 'pending', detail: 'Span duration: 2.00s candidate region' }
+        { label: 'Compute STFT spectrogram & spectral peaks', status: 'done', detail: 'Frame-level acoustic features' },
+        { label: 'Filter subharmonic integer multiples (2×, 3× F0)', status: 'done', detail: 'Octave multiples of one voice are not counted as a second' },
+        { label: 'Isolate candidate overlap windows', status: 'active', detail: 'Heuristic pitch-clash and overlap scores' },
+        { label: 'Forward candidate region to routing controller', status: 'pending', detail: 'Each region carries its time span and scores' }
       ]
     },
     {
@@ -126,10 +131,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       desc: 'Estimate expected recognition utility before routing each eligible region. Demix concurrent talkers via Conv-TasNet only when predicted ASR gain exceeds compute penalty.',
       taskPrompt: 'compute routing utility [U = E[ΔAcc] - λ·Cost]',
       steps: [
-        { label: 'Extract feature vector (overlap dur, logprob, clash)', status: 'done', detail: 'Features: [2.0s, -1.28, 0.74, 38.2dB]' },
-        { label: 'Estimate expected accuracy benefit E[ΔAcc]', status: 'done', detail: 'Predicted error reduction: +54%' },
-        { label: 'Calculate Net Utility (λ = 0.45): U = +0.38', status: 'active', detail: 'Net utility > 0: separation approved' },
-        { label: 'Execute ConvTasNet separation forward pass', status: 'pending', detail: 'Demixing Stream 1 & Stream 2 on Apple Silicon MPS' }
+        { label: 'Extract feature vector (overlap dur, logprob, clash)', status: 'done', detail: 'Duration, log-probability, clash, overlap score' },
+        { label: 'Estimate expected benefit (heuristic)', status: 'done', detail: 'Uncalibrated prediction, labelled as such' },
+        { label: 'Calculate net utility: benefit − λ·cost', status: 'active', detail: 'Compared with a decision margin' },
+        { label: 'Execute ConvTasNet separation forward pass', status: 'pending', detail: 'Demixing Stream 1 & Stream 2 (ConvTasNet, CPU)' }
       ]
     },
     {
@@ -140,9 +145,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       taskPrompt: 'reconcile stream hypotheses [Speaker 1 / Speaker 2]',
       steps: [
         { label: 'Transcribe separated Stream 1 and Stream 2', status: 'done', detail: 'Generated parallel token streams with timestamps' },
-        { label: 'Deduplicate cross-stream acoustic leakage', status: 'done', detail: 'Pruned 2 acoustic bleed phantom words' },
-        { label: 'Filter degenerate hallucination repetition loops', status: 'done', detail: 'Confidence gating: 0 hallucinated loops' },
-        { label: 'Generate unified speaker-attributed transcript', status: 'active', detail: 'Assigned 100% of tokens to Spk 1 (ta) & Spk 2 (en)' }
+        { label: 'Deduplicate cross-stream acoustic leakage', status: 'done', detail: 'Duplicate cross-talk segments are removed' },
+        { label: 'Filter degenerate hallucination repetition loops', status: 'done', detail: 'Repetition filter on separated text' },
+        { label: 'Generate unified speaker-attributed transcript', status: 'active', detail: 'Segments carry speaker and source stream' }
       ]
     }
   ];
@@ -156,13 +161,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         <div className="parley-nav-container">
           <div className="parley-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className="parley-logo-mark">
-              <span className="parley-logo-icon">OW</span>
+              <WordmarkMark size={22} />
             </div>
-            <span className="parley-logo-text">OverlapWeave</span>
+            <span className="parley-logo-text">Routone</span>
           </div>
 
           <nav className="parley-nav-links">
-            <a href="#why-weave">Why Weave</a>
+            <a href="#why-weave">Why Routone</a>
             <a href="#workflow">Workflow</a>
             <a href="#integrations">Integrations</a>
             <button onClick={() => onNavigate('benchmarks')} className="parley-nav-link-btn">
@@ -197,13 +202,18 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="parley-hero-overlay"></div>
 
           <div className="parley-hero-content">
+            <div className="parley-hero-badge">
+              <span className="parley-hero-badge-dot"></span>
+              ADAPTIVE ROUTING FOR OVERLAPPING SPEECH RECOGNITION
+            </div>
+
             <h1 className="parley-hero-title">
-              Hear more of the conversation. <br />
-              <span className="parley-serif-italic">Even when voices collide.</span>
+              Understand mixed speech. <br />
+              <span className="parley-serif-italic">Route only when necessary.</span>
             </h1>
 
             <p className="parley-hero-subtitle">
-              OverlapWeave compares the original mixture with separated speech and selectively routes difficult
+              Routone compares the original mixture with separated speech and selectively routes difficult
               regions when the predicted recognition benefit justifies the additional processing cost.
             </p>
 
@@ -231,7 +241,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
         {/* TRUSTED BY / PARTNERS BAR */}
         <div className="parley-partners-bar">
-          <p className="parley-partners-label">Evaluated on Tamil–English Conversational Benchmarks · Powered by Open Research</p>
+          <p className="parley-partners-label">Built on open research tools</p>
           <div className="parley-partners-grid">
             <div className="parley-partner-item">
               <span className="partner-name">PyTorch 2.x</span>
@@ -259,7 +269,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       <section id="why-weave" className="parley-section">
         <div className="parley-section-header">
           <div>
-            <span className="parley-eyebrow">Why OverlapWeave</span>
+            <span className="parley-eyebrow">Why Routone</span>
             <h2 className="parley-section-title">
               A selective partner, <br />
               <span className="parley-serif-italic">not brute-force separation</span>
@@ -267,7 +277,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
           <p className="parley-section-lead">
             Most multi-talker speech systems either ignore overlapping talkers entirely or apply costly separation to every second.
-            OverlapWeave estimates the expected recognition benefit before routing each region — preserving single-speaker clarity and slashing latency.
+            Routone estimates the expected recognition benefit before routing each region — preserving single-speaker clarity and slashing latency.
           </p>
         </div>
 
@@ -389,7 +399,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             </h2>
           </div>
           <p className="parley-section-lead">
-            Provide unconstrained conversational audio with simultaneous talkers. OverlapWeave breaks it into acoustic features, predicts utility, demixes streams, and attributes every word — keeping you updated along the way.
+            Provide unconstrained conversational audio with simultaneous talkers. Routone breaks it into acoustic features, predicts utility, demixes streams, and attributes every word — keeping you updated along the way.
           </p>
         </div>
 
@@ -439,15 +449,15 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <span className="dot dot-yellow"></span>
                 <span className="dot dot-green"></span>
               </div>
-              <div className="parley-window-title">OverlapWeave Pipeline Controller</div>
-              <div className="parley-window-badge">Apple Silicon MPS</div>
+              <div className="parley-window-title">Routone pipeline</div>
+              <div className="parley-window-badge">Illustrative workflow</div>
             </div>
 
             <div className="parley-window-body">
               {/* Mini Sidebar */}
               <div className="parley-window-sidebar">
                 <div className="parley-ws-header">
-                  <span className="parley-ws-avatar">OW</span>
+                  <span className="parley-ws-avatar">R</span>
                   <span className="parley-ws-name">AudioLab</span>
                 </div>
                 <div className="parley-ws-section-label">WORKSPACE</div>
@@ -528,18 +538,18 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <span className="parley-eyebrow">Integrations &amp; Stack</span>
           <h2 className="parley-section-title">
             Connect your speech pipeline. <br />
-            <span className="parley-serif-italic">OverlapWeave meets you there.</span>
+            <span className="parley-serif-italic">Routone meets you there.</span>
           </h2>
           <p className="parley-section-lead center">
             PyTorch, faster-whisper, Torchaudio, FastAPI, Hugging Face, and Web Audio.
-            OverlapWeave triggers actions, fetches acoustic context, and keeps transcripts synchronized — right where your team already works.
+            Routone triggers actions, fetches acoustic context, and keeps transcripts synchronized — right where your team already works.
           </p>
         </div>
 
         {/* 2 ROWS OF SOFT ROUNDED TILES WITH AUTHENTIC SVGS (NO EMOJIS) */}
         <div className="parley-integrations-wrap">
           <div className="parley-integrations-row">
-            <div className="parley-tool-tile" title="PyTorch 2.x MPS & CUDA acceleration">
+            <div className="parley-tool-tile" title="PyTorch 2.x">
               <div className="tool-logo-mark">
                 {/* PyTorch SVG */}
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EE4C2C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -681,55 +691,49 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 6. EMPIRICAL RESEARCH BENCHMARKS SECTION */}
+      {/* 6. EVALUATION — live state of the saved benchmark, never hardcoded numbers */}
       <section className="parley-section parley-section-light">
         <div className="parley-section-header parley-center-header">
-          <span className="parley-eyebrow">Empirical Evaluation</span>
+          <span className="parley-eyebrow">Evaluation</span>
           <h2 className="parley-section-title">
-            Measured accuracy and latency <br />
-            <span className="parley-serif-italic">on overlapping Tamil–English speech</span>
+            Claims follow the data. <br />
+            <span className="parley-serif-italic">Nothing is shown that wasn’t measured.</span>
           </h2>
           <p className="parley-section-lead center">
-            Evaluated on synthetic dual-talker mixtures with ground-truth speaker attribution.
-            Source: <code style={{ fontSize: '0.85em', background: '#eef', padding: '2px 6px', borderRadius: '4px' }}>results/benchmarks.json</code>.
+            {bench
+              ? `Latest saved benchmark: ${bench.dataset_name}. Status: ${bench.status ?? 'legacy report (validity unknown)'}.`
+              : wb.backend === 'offline'
+                ? 'Start the backend to see the latest benchmark status.'
+                : 'No benchmark has been run yet.'}
           </p>
         </div>
 
-        <div className="parley-metrics-grid">
-          <div className="parley-metric-card">
-            <div className="metric-val text-amber-600">27.6%</div>
-            <div className="metric-title">Speaker-Attributed WER</div>
-            <div className="metric-desc">Benefit-aware routing improves multi-speaker attribution by resolving acoustic cross-talk intervals.</div>
+        {bench && (
+          <div className="parley-metrics-grid">
+            <div className="parley-metric-card">
+              <div className="metric-val">{bench.results.length}</div>
+              <div className="metric-title">Strategies evaluated</div>
+              <div className="metric-desc">Only strategies that actually ran are listed.</div>
+            </div>
+            <div className="parley-metric-card">
+              <div className="metric-val">{bench.dataset?.samples_evaluated ?? bench.results[0]?.evaluated_samples_count ?? '—'}</div>
+              <div className="metric-title">Recordings scored</div>
+              <div className="metric-desc">Small samples cannot support claims of improvement.</div>
+            </div>
+            <div className="parley-metric-card">
+              <div className="metric-val">{bench.status ?? 'unknown'}</div>
+              <div className="metric-title">Experiment status</div>
+              <div className="metric-desc">{(bench.warnings ?? [])[0] ?? 'Re-run the benchmark to attach integrity checks.'}</div>
+            </div>
           </div>
-
-          <div className="parley-metric-card">
-            <div className="metric-val text-blue-600">680 ms</div>
-            <div className="metric-title">P50 Inference Latency</div>
-            <div className="metric-desc">~5.8× faster than Always-Separate (1,914 ms), bypassing separation on clean speech spans.</div>
-          </div>
-
-          <div className="parley-metric-card">
-            <div className="metric-val text-emerald-600">35%</div>
-            <div className="metric-title">Separation Invoked</div>
-            <div className="metric-desc">65% of audio frames remain unprocessed by Conv-TasNet, eliminating musical phase distortion.</div>
-          </div>
-
-          <div className="parley-metric-card">
-            <div className="metric-val text-violet-600">0.0%</div>
-            <div className="metric-title">Clean Speech Degradation</div>
-            <div className="metric-desc">Preserves unseparated audio path when no overlap clash is detected, avoiding demixing loss.</div>
-          </div>
-        </div>
+        )}
 
         <div className="parley-bench-cta-wrap">
-          <button
-            onClick={() => onNavigate('benchmarks')}
-            className="parley-btn"
-          >
+          <button onClick={() => onNavigate('benchmarks')} className="parley-btn">
             <span className="parley-btn-icon">
               <ChevronRight size={16} strokeWidth={2.5} />
             </span>
-            <span className="parley-btn-label">Open Benchmark Lab</span>
+            <span className="parley-btn-label">Open Benchmarks</span>
           </button>
         </div>
       </section>
@@ -740,12 +744,12 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="parley-banner-overlay"></div>
           <div className="parley-banner-content">
             <h2 className="parley-banner-title">
-              Meet your speech partner. <br />
-              <span className="parley-serif-italic">Built for real conversations.</span>
+              Meet your research instrument. <br />
+              <span className="parley-serif-italic">Built for overlapping speech.</span>
             </h2>
             <p className="parley-banner-subtitle">
-              Join researchers and engineers evaluating next-generation speech separation.
-              Set up in minutes. Run locally on CPU or Apple Silicon MPS.
+              Explore when speech separation is worth its cost.
+              Runs locally on your machine, on CPU.
             </p>
             <div className="parley-banner-cta-group">
               <button
@@ -777,12 +781,12 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="parley-footer-brand-col">
               <div className="parley-logo">
                 <div className="parley-logo-mark">
-                  <span className="parley-logo-icon">OW</span>
+                  <WordmarkMark size={22} />
                 </div>
-                <span className="parley-logo-text">OverlapWeave</span>
+                <span className="parley-logo-text">Routone</span>
               </div>
               <p className="parley-footer-tagline">
-                Benefit-Aware Adaptive Speech Separation for Speaker-Attributed ASR in Overlapping Tamil–English Conversations.
+                Adaptive routing for overlapping speech recognition.
               </p>
               <div className="parley-footer-tags">
                 <span className="footer-tag">PyTorch 2.x</span>
@@ -826,9 +830,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               <div className="parley-footer-col">
                 <h5 className="footer-col-title">Project</h5>
                 <ul>
-                  <li><span className="footer-text">College Task 2 ASR</span></li>
+                  <li><span className="footer-text">Speech research workbench</span></li>
                   <li><span className="footer-text">Tamil-English (Tanglish)</span></li>
-                  <li><span className="footer-text">Apple Silicon MPS</span></li>
+                  <li><span className="footer-text">Runs locally on CPU</span></li>
                   <li><span className="footer-text">Apache 2.0 License</span></li>
                 </ul>
               </div>
@@ -837,11 +841,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
           <div className="parley-footer-bottom">
             <div className="parley-footer-copy">
-              © 2026 OverlapWeave. Research &amp; Engineering by the OverlapWeave Team.
+              © 2026 Routone.
             </div>
             <div className="parley-footer-socials">
-              <span className="social-pill">Designed with precision</span>
-              <span className="social-pill">Framer Inspired</span>
+              <span className="social-pill">Understand mixed speech. Route only when necessary.</span>
             </div>
           </div>
         </div>
