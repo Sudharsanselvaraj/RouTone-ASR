@@ -3,6 +3,7 @@ import { useWorkbench } from '../state/store';
 import { WordmarkMark } from './ui';
 import { TechMarquee } from './TechMarquee';
 import { FeatureCards } from './FeatureCards';
+import { asset } from '../lib/assets';
 import {
   ChevronRight,
   ArrowUpRight,
@@ -203,7 +204,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               ['FastAPI', 'fastapi'],
             ].map(([name, icon]) => (
               <li className="parley-partner-item" key={name}>
-                <span className="partner-icon" style={{ ['--icon' as string]: `url(/logos/${icon}.svg)` }} aria-hidden="true" />
+                <span className="partner-icon" style={{ ['--icon' as string]: `url(${asset(`logos/${icon}.svg`)})` }} aria-hidden="true" />
                 <span className="partner-name">{name}</span>
               </li>
             ))}
@@ -520,8 +521,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <ul>
                   <li><button onClick={() => onNavigate('benchmarks')} className="footer-link">SA-WER Metric</button></li>
                   <li><a href="https://github.com/Sudharsanselvaraj/RouTone-ASR" target="_blank" rel="noreferrer" className="footer-link">GitHub Repository</a></li>
-                  <li><a href="/README.md" className="footer-link">Implementation Plan</a></li>
-                  <li><a href="/SPEC.md" className="footer-link">Project Specification</a></li>
+                  <li><a href="https://github.com/Sudharsanselvaraj/RouTone-ASR#readme" target="_blank" rel="noreferrer" className="footer-link">README</a></li>
+                  <li><a href="https://github.com/Sudharsanselvaraj/RouTone-ASR/blob/main/SPEC.md" target="_blank" rel="noreferrer" className="footer-link">Project Specification</a></li>
                 </ul>
               </div>
 
