@@ -14,7 +14,7 @@
 
 ### C. Permutation Invariance & Cross-Chunk Speaker Consistency
 - **Constraint:** In multi-window separation, independent chunk processing can experience permutation swap (where Speaker 1 is assigned to Output A in chunk 1, but Output B in chunk 2).
-- **Mitigation:** OverlapWeave implements cross-stream correlation matching across windowed cross-fades and acoustic embedding continuity to align speaker tracks consistently.
+- **Mitigation:** Routone implements cross-stream correlation matching across windowed cross-fades and acoustic embedding continuity to align speaker tracks consistently.
 
 ---
 
