@@ -3,7 +3,6 @@ import {
   ChevronRight,
   ArrowUpRight,
   CheckCircle2,
-  Sparkles,
   ArrowRight
 } from 'lucide-react';
 
@@ -12,61 +11,140 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ onNavigate }: LandingPageProps) {
+  // Feature cards active index (0: Mixture ASR, 1: Overlap Detection, 2: Benefit Routing, 3: Measured Evaluation)
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+
+  // Capability showcase workflow index
   const [activeWorkflowIndex, setActiveWorkflowIndex] = useState(0);
 
-  const workflows = [
+  const featureCards = [
+    {
+      id: 'mixture',
+      num: '01.',
+      title: 'Mixture-first ASR',
+      inactiveDesc: 'Transcribe the original recording first before deciding whether separation is needed.',
+      activeDesc: 'Obtains baseline word timestamps and token-level acoustic confidence directly on the unseparated audio, preventing unnecessary compute on clean speech.',
+      preview: {
+        tag: 'Baseline Mixture Engine',
+        headline: 'faster-whisper int8 · 16 kHz Mono',
+        details: [
+          { label: 'Baseline Confidence', val: '92.4%' },
+          { label: 'Token Log-Likelihood', val: '-0.34 avg' },
+          { label: 'Primary Language', val: 'Tamil / English' }
+        ],
+        badge: 'No separation penalty',
+        snippet: '"வணக்கம், let us begin the project status review..."'
+      }
+    },
     {
       id: 'overlap',
-      label: 'Real-time Multi-pitch Overlap Detection',
-      tag: 'Acoustic Front-end',
-      desc: 'Harmonic clash index (C_harm), subharmonic octave suppression (2x, 3x F0), and crest factor analysis track fundamental frequencies to pinpoint concurrent speaker collisions.',
-      taskPrompt: 'prep Tamil-English conversation [eval_te_01.wav]',
-      steps: [
-        { label: 'Ingest 16 kHz mono dual-talker waveform', status: 'done', detail: 'Sample duration: 5.20s · SNR: 38.2 dB' },
-        { label: 'Compute STFT spectrogram & multi-pitch peaks', status: 'done', detail: 'F0_A: 130 Hz (Male) · F0_B: 220 Hz (Female)' },
-        { label: 'Detect harmonic clash region: [01.20s – 03.20s]', status: 'active', detail: 'Harmonic clash index = 0.74 > threshold' },
-        { label: 'Tag overlap span for controller evaluation', status: 'pending', detail: 'Duration: 2.00s candidate window' },
-      ],
+      num: '02.',
+      title: 'Overlap detection',
+      inactiveDesc: 'Identify portions of the recording that contain simultaneously active speakers.',
+      activeDesc: 'Tracks fundamental frequencies (F0) and harmonic clash indices (C_harm) with subharmonic octave suppression to isolate dual-talker collision spans.',
+      preview: {
+        tag: 'Harmonic Clash Front-End',
+        headline: 'Dual-Pitch Collision Interval',
+        details: [
+          { label: 'Clash Score (C_harm)', val: '0.74 > 0.50' },
+          { label: 'Speaker 1 F0', val: '130 Hz (Male)' },
+          { label: 'Speaker 2 F0', val: '220 Hz (Female)' }
+        ],
+        badge: 'Collision flagged: 01.20s – 03.20s',
+        snippet: 'Cross-talk interval detected: 2 active concurrent voices'
+      }
     },
     {
       id: 'routing',
-      label: 'Benefit-Aware Separation Routing',
-      tag: 'Dynamic Controller',
-      desc: 'Evaluates expected downstream ASR gain against normalized compute cost: U = E[ΔAcc] - λ·Cost. Automatically keeps single-speaker audio untouched and routes only degraded collisions.',
-      taskPrompt: 'evaluate routing utility [region_01: 01.20s - 03.20s]',
-      steps: [
-        { label: 'Extract region features (duration, clash, baseline logprob)', status: 'done', detail: 'C_harm: 0.74 · Avg logprob: -1.28' },
-        { label: 'Estimate downstream accuracy benefit E[ΔAcc]', status: 'done', detail: 'Expected word error reduction: +54%' },
-        { label: 'Compute normalized ConvTasNet penalty (λ = 0.45)', status: 'done', detail: 'Cost penalty: 0.16 utility units' },
-        { label: 'Calculate Net Utility: U = +0.38 > 0 → ROUTE_SEPARATION', status: 'active', detail: 'Separation justified: demixing scheduled' },
-      ],
+      num: '03.',
+      title: 'Benefit-aware routing',
+      inactiveDesc: 'Estimate whether separating a selected region is likely to improve recognition enough to justify additional processing cost.',
+      activeDesc: 'Dynamically computes expected recognition utility U = E[ΔAcc] - λ·Cost. Only regions where predicted gain outweighs latency are routed to Conv-TasNet.',
+      preview: {
+        tag: 'Decision Controller',
+        headline: 'Net Utility U = E[ΔAcc] - λ·Cost',
+        details: [
+          { label: 'Predicted ASR Gain', val: '+54.0%' },
+          { label: 'Compute Cost (λ=0.45)', val: '0.16' },
+          { label: 'Calculated Utility', val: '+0.38 > 0' }
+        ],
+        badge: 'Action: ROUTE_SEPARATION',
+        snippet: 'Separation justified: scheduled on PyTorch MPS engine'
+      }
     },
     {
-      id: 'separation',
-      label: 'Cross-Talk Acoustic Demixing (ConvTasNet)',
-      tag: 'PyTorch MPS Engine',
-      desc: 'Isolates mixed voices into discrete acoustic streams using ConvTasNet Libri2Mix with cross-fade overlap-add to eliminate boundary phase discontinuities.',
-      taskPrompt: 'demix collision slice [01.20s - 03.20s]',
+      id: 'evaluation',
+      num: '04.',
+      title: 'Measured evaluation',
+      inactiveDesc: 'Compare speaker-attributed recognition accuracy, latency and separation overhead against baseline methods.',
+      activeDesc: 'Quantifies speaker-attributed WER (SA-WER), word timestamp precision, and P50 latency percentiles across synthetic and real conversational datasets.',
+      preview: {
+        tag: 'Empirical Benchmark',
+        headline: 'SA-WER Alignment & Latency',
+        details: [
+          { label: 'Proposed SA-WER', val: '27.6%' },
+          { label: 'Latency Speedup', val: '5.8× P50' },
+          { label: 'Separation Invoked', val: '35% of regions' }
+        ],
+        badge: 'Optimal Pareto Front',
+        snippet: 'Saved 65% compute while outperforming always-separate'
+      }
+    }
+  ];
+
+  const workflows = [
+    {
+      id: 'wf-mixture',
+      label: 'Original-mixture transcription',
+      tag: 'Stage 1 · Baseline ASR',
+      desc: 'Transcribe natural multi-talker audio with faster-whisper int8 to obtain baseline word timestamps, segment bounds, and acoustic confidence scores before routing.',
+      taskPrompt: 'transcribe mixture [eval_te_01.wav · 5.2s]',
       steps: [
-        { label: 'Extract audio slice with 100ms context padding', status: 'done', detail: 'Slice length: 35,200 samples' },
-        { label: 'Execute 1D Conv-TasNet separation forward pass', status: 'done', detail: 'Latency: 142ms on Apple Silicon MPS' },
-        { label: 'Synthesize Stream 1 (Primary) and Stream 2 (Secondary)', status: 'active', detail: 'Estimated SI-SDR improvement: +9.4 dB' },
-        { label: 'Apply Hanning cross-fade taper to mixture boundaries', status: 'pending', detail: 'Zero audible boundary click artifacts' },
-      ],
+        { label: 'Ingest 16 kHz mono waveform', status: 'done', detail: 'Audio length: 5.20s · SNR: 38.2 dB' },
+        { label: 'Run faster-whisper int8 multilingual decode', status: 'done', detail: 'Identified Tamil-English intra-sentential speech' },
+        { label: 'Generate word-level timestamp alignment', status: 'active', detail: 'Detected 14 baseline candidate tokens' },
+        { label: 'Extract average segment logprob (-0.42)', status: 'pending', detail: 'Baseline hypothesis saved for reconciliation' }
+      ]
     },
     {
-      id: 'reconciliation',
-      label: 'Speaker-Attributed Transcript Reconciliation',
-      tag: 'Multilingual Alignment',
-      desc: 'Aligns word-level timestamps across separated streams and baseline hypothesis, pruning acoustic leakage repetitions and resolving Tamil-English code-switches.',
-      taskPrompt: 'reconcile candidate hypotheses [faster-whisper]',
+      id: 'wf-overlap',
+      label: 'Overlap-region detection',
+      tag: 'Stage 2 · Multi-Pitch Analysis',
+      desc: 'Detect concurrent voiced intervals using multi-pitch tracking, harmonic clash analysis (C_harm), and subharmonic octave filtering to avoid false alarms.',
+      taskPrompt: 'detect overlap collisions [region_01]',
       steps: [
-        { label: 'Transcribe Stream 1 & Stream 2 with word timestamps', status: 'done', detail: 'faster-whisper int8 · Multilingual ta/en' },
-        { label: 'Deduplicate acoustic leakage cross-talk tokens', status: 'done', detail: 'Filtered 2 phantom echo tokens' },
-        { label: 'Prune repetitive hallucination loops', status: 'done', detail: 'Confidence gating: 0 hallucinated loops' },
-        { label: 'Synthesize final attributed dialogue with timestamps', status: 'active', detail: 'Attributed 100% tokens to Spk1 / Spk2' },
-      ],
+        { label: 'Compute STFT spectrogram & spectral peaks', status: 'done', detail: 'Frame step: 10ms · Window: 32ms Hanning' },
+        { label: 'Filter subharmonic integer multiples (2×, 3× F0)', status: 'done', detail: 'Rejected same-speaker subharmonic false positives' },
+        { label: 'Isolate dual-talker collision window [01.20s – 03.20s]', status: 'active', detail: 'Harmonic clash index: 0.74 > threshold 0.50' },
+        { label: 'Forward candidate region to routing controller', status: 'pending', detail: 'Span duration: 2.00s candidate region' }
+      ]
     },
+    {
+      id: 'wf-routing',
+      label: 'Selective speech separation',
+      tag: 'Stage 3 · Adaptive Controller',
+      desc: 'Estimate expected recognition utility before routing each eligible region. Demix concurrent talkers via Conv-TasNet only when predicted ASR gain exceeds compute penalty.',
+      taskPrompt: 'compute routing utility [U = E[ΔAcc] - λ·Cost]',
+      steps: [
+        { label: 'Extract feature vector (overlap dur, logprob, clash)', status: 'done', detail: 'Features: [2.0s, -1.28, 0.74, 38.2dB]' },
+        { label: 'Estimate expected accuracy benefit E[ΔAcc]', status: 'done', detail: 'Predicted error reduction: +54%' },
+        { label: 'Calculate Net Utility (λ = 0.45): U = +0.38', status: 'active', detail: 'Net utility > 0: separation approved' },
+        { label: 'Execute ConvTasNet separation forward pass', status: 'pending', detail: 'Demixing Stream 1 & Stream 2 on Apple Silicon MPS' }
+      ]
+    },
+    {
+      id: 'wf-reconciliation',
+      label: 'Speaker-attributed reconciliation',
+      tag: 'Stage 4 · Hypothesis Merging',
+      desc: 'Resolve acoustic leakage across streams, prune repetitive hallucination loops, and assign word tokens to respective speakers with verifiable time alignment.',
+      taskPrompt: 'reconcile stream hypotheses [Speaker 1 / Speaker 2]',
+      steps: [
+        { label: 'Transcribe separated Stream 1 and Stream 2', status: 'done', detail: 'Generated parallel token streams with timestamps' },
+        { label: 'Deduplicate cross-stream acoustic leakage', status: 'done', detail: 'Pruned 2 acoustic bleed phantom words' },
+        { label: 'Filter degenerate hallucination repetition loops', status: 'done', detail: 'Confidence gating: 0 hallucinated loops' },
+        { label: 'Generate unified speaker-attributed transcript', status: 'active', detail: 'Assigned 100% of tokens to Spk 1 (ta) & Spk 2 (en)' }
+      ]
+    }
   ];
 
   const currentWorkflow = workflows[activeWorkflowIndex];
@@ -117,21 +195,21 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       <section className="parley-hero-section">
         <div className="parley-hero-card">
           <div className="parley-hero-overlay"></div>
-          
+
           <div className="parley-hero-content">
             <div className="parley-hero-badge">
               <span className="parley-hero-badge-dot"></span>
-              Research & Evaluation Platform · Multilingual ASR
+              MULTI-TALKER SPEECH RESEARCH
             </div>
 
             <h1 className="parley-hero-title">
-              The speech system that listens <br />
-              <span className="parley-serif-italic">through overlap</span>, not just past it
+              Hear more of the conversation. <br />
+              <span className="parley-serif-italic">Even when voices collide.</span>
             </h1>
 
             <p className="parley-hero-subtitle">
-              OverlapWeave dynamically routes speech separation only when acoustic overlap degrades transcription —
-              delivering pristine speaker-attributed ASR in Tamil and English without compute overhead.
+              OverlapWeave compares the original mixture with separated speech and selectively routes difficult
+              regions when the predicted recognition benefit justifies the additional processing cost.
             </p>
 
             <div className="parley-hero-cta-group">
@@ -142,7 +220,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <span className="parley-btn-icon">
                   <ChevronRight size={18} strokeWidth={2.5} />
                 </span>
-                <span className="parley-btn-label">Get started free</span>
+                <span className="parley-btn-label">Launch Studio</span>
               </button>
 
               <button
@@ -161,7 +239,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           <p className="parley-partners-label">Evaluated on Tamil–English Conversational Benchmarks · Powered by Open Research</p>
           <div className="parley-partners-grid">
             <div className="parley-partner-item">
-              <span className="partner-name">PyTorch</span>
+              <span className="partner-name">PyTorch 2.x</span>
             </div>
             <div className="parley-partner-item">
               <span className="partner-name">faster-whisper</span>
@@ -182,7 +260,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 3. WHY OVERLAPWEAVE SECTION */}
+      {/* 3. WHY OVERLAPWEAVE SECTION — EXPANDABLE FEATURE CARDS */}
       <section id="why-weave" className="parley-section">
         <div className="parley-section-header">
           <div>
@@ -194,92 +272,114 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </div>
           <p className="parley-section-lead">
             Most multi-talker speech systems either ignore overlapping talkers entirely or apply costly separation to every second.
-            OverlapWeave calculates the exact recognition gain before invoking separation — anticipating degradation, executing Conv-TasNet demixing, and preserving single-speaker clarity.
+            OverlapWeave estimates the expected recognition benefit before routing each region — preserving single-speaker clarity and slashing latency.
           </p>
         </div>
 
-        <div className="parley-cards-grid">
-          {/* Card 1: Elevated card with speech bubble preview */}
-          <div className="parley-card parley-card-highlight">
-            <div className="parley-card-preview-box">
-              <div className="parley-chat-bubble">
-                <div className="parley-bubble-icon">
-                  <Sparkles size={14} className="text-amber-600" />
-                </div>
-                <div className="parley-bubble-text">
-                  <span className="bubble-time">[01:12 – 03:40]</span> Dual-speaker clash detected. Utility U = +0.42 → <strong>ROUTE_SEPARATION</strong>
-                </div>
-              </div>
-            </div>
-            <div className="parley-card-body">
-              <h3 className="parley-card-title">Always benefit-aware</h3>
-              <p className="parley-card-desc">
-                Calculates net utility U = E[ΔAcc] - λ·Cost. Invokes Conv-TasNet only when predicted ASR gain exceeds the latency penalty, avoiding the 5.8× compute overhead of always-separate.
-              </p>
-            </div>
-          </div>
+        {/* EXPANDABLE 4-CARD FLEX ROW MATCHING PARLEY FRAMER */}
+        <div className="parley-cards-flex-row" role="region" aria-label="Feature Architecture Cards">
+          {featureCards.map((card, idx) => {
+            const isActive = activeCardIndex === idx;
+            return (
+              <div
+                key={card.id}
+                tabIndex={0}
+                role="button"
+                aria-pressed={isActive}
+                onMouseEnter={() => setActiveCardIndex(idx)}
+                onFocus={() => setActiveCardIndex(idx)}
+                onClick={() => setActiveCardIndex(idx)}
+                className={`parley-flex-card ${isActive ? 'is-active' : 'is-inactive'}`}
+              >
+                {/* INACTIVE STATE CONTENT */}
+                {!isActive && (
+                  <div className="card-inactive-inner">
+                    <div className="card-inactive-top">
+                      <span className="card-inactive-watermark">{card.num}</span>
+                      {/* Geometric square motifs matching Parley reference */}
+                      {idx === 0 && (
+                        <div className="inactive-motif motif-grid-2x2">
+                          <span className="sq s1"></span>
+                          <span className="sq s2"></span>
+                          <span className="sq s3"></span>
+                          <span className="sq s4"></span>
+                        </div>
+                      )}
+                      {idx === 1 && (
+                        <div className="inactive-motif motif-grid-3x2">
+                          <span className="sq s1"></span>
+                          <span className="sq s2"></span>
+                          <span className="sq s3"></span>
+                          <span className="sq s4"></span>
+                          <span className="sq s5"></span>
+                          <span className="sq s6"></span>
+                        </div>
+                      )}
+                      {idx === 2 && (
+                        <div className="inactive-motif motif-row-5">
+                          <span className="dot d1"></span>
+                          <span className="dot d2"></span>
+                          <span className="dot d3"></span>
+                          <span className="dot d4"></span>
+                          <span className="dot d5"></span>
+                        </div>
+                      )}
+                      {idx === 3 && (
+                        <div className="inactive-motif motif-scatter-6">
+                          <span className="sq s1"></span>
+                          <span className="sq s2"></span>
+                          <span className="sq s3"></span>
+                          <span className="sq s4"></span>
+                          <span className="sq s5"></span>
+                          <span className="sq s6"></span>
+                        </div>
+                      )}
+                    </div>
 
-          {/* Card 2: Multi-pitch Overlap */}
-          <div className="parley-card">
-            <div className="parley-card-graphic">
-              <span className="parley-card-watermark">02.</span>
-              <div className="parley-blocks-art">
-                <div className="block b-1"></div>
-                <div className="block b-2"></div>
-                <div className="block b-3"></div>
-                <div className="block b-4"></div>
-                <div className="block b-5"></div>
-                <div className="block b-6"></div>
-              </div>
-            </div>
-            <div className="parley-card-body">
-              <h3 className="parley-card-title">Takes real action</h3>
-              <p className="parley-card-desc">
-                Beyond standard energy VAD, multi-pitch harmonic clash analysis (C_harm) with subharmonic suppression identifies concurrent voiced speakers and isolates conflict zones without hallucinating.
-              </p>
-            </div>
-          </div>
+                    <div className="card-inactive-bottom">
+                      <h3 className="card-inactive-title">{card.title}</h3>
+                      <p className="card-inactive-desc">{card.inactiveDesc}</p>
+                    </div>
+                  </div>
+                )}
 
-          {/* Card 3: Bilingual Tamil-English */}
-          <div className="parley-card">
-            <div className="parley-card-graphic">
-              <span className="parley-card-watermark">03.</span>
-              <div className="parley-nodes-art">
-                <div className="node n-1"></div>
-                <div className="node n-2"></div>
-                <div className="node n-3"></div>
-                <div className="node n-4"></div>
-                <div className="node n-5"></div>
-              </div>
-            </div>
-            <div className="parley-card-body">
-              <h3 className="parley-card-title">Connects everything</h3>
-              <p className="parley-card-desc">
-                Engineered specifically for natural multilingual turn-taking, backchanneling, and intra-sentential Tanglish code-switching with word-level acoustic alignment.
-              </p>
-            </div>
-          </div>
+                {/* ACTIVE STATE CONTENT WITH DEDICATED PREVIEW */}
+                {isActive && (
+                  <div className="card-active-inner">
+                    <div className="card-active-preview">
+                      <div className="preview-header-row">
+                        <span className="preview-tag">{card.preview.tag}</span>
+                        <span className="preview-badge">{card.preview.badge}</span>
+                      </div>
+                      <div className="preview-headline">{card.preview.headline}</div>
+                      
+                      <div className="preview-metrics-grid">
+                        {card.preview.details.map((d, dIdx) => (
+                          <div key={dIdx} className="preview-metric-item">
+                            <span className="metric-lbl">{d.label}</span>
+                            <span className="metric-num">{d.val}</span>
+                          </div>
+                        ))}
+                      </div>
 
-          {/* Card 4: Speaker-Attributed Reconciliation */}
-          <div className="parley-card">
-            <div className="parley-card-graphic">
-              <span className="parley-card-watermark">04.</span>
-              <div className="parley-scatter-art">
-                <div className="dot d-1"></div>
-                <div className="dot d-2"></div>
-                <div className="dot d-3"></div>
-                <div className="dot d-4"></div>
-                <div className="dot d-5"></div>
-                <div className="dot d-6"></div>
+                      <div className="preview-snippet-box">
+                        <span className="snippet-icon">probe &gt;</span>
+                        <span className="snippet-text">{card.preview.snippet}</span>
+                      </div>
+                    </div>
+
+                    <div className="card-active-body">
+                      <div className="card-active-title-row">
+                        <span className="card-active-num">{card.num}</span>
+                        <h3 className="card-active-title">{card.title}</h3>
+                      </div>
+                      <p className="card-active-desc">{card.activeDesc}</p>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-            <div className="parley-card-body">
-              <h3 className="parley-card-title">Gets better over time</h3>
-              <p className="parley-card-desc">
-                Acoustic stream leakage deduplication, anti-hallucination pruning, and temporal reconciliation assign every word to Speaker 1 or Speaker 2 with verifiable provenance.
-              </p>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </section>
 
@@ -345,7 +445,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <span className="dot dot-green"></span>
               </div>
               <div className="parley-window-title">OverlapWeave Pipeline Controller</div>
-              <div className="parley-window-badge">MPS Accelerated</div>
+              <div className="parley-window-badge">Apple Silicon MPS</div>
             </div>
 
             <div className="parley-window-body">
@@ -360,19 +460,19 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   <span>+ New Transcript</span>
                 </div>
                 <div className="parley-ws-item">
-                  <span>Inbox</span>
-                  <span className="parley-ws-count">3</span>
+                  <span>Inspector</span>
+                  <span className="parley-ws-count">1</span>
                 </div>
                 <div className="parley-ws-item">
-                  <span>Tasks</span>
-                  <span className="parley-ws-count">12</span>
+                  <span>Routing Lab</span>
+                  <span className="parley-ws-count">λ=0.45</span>
                 </div>
                 <div className="parley-ws-section-label">LIBRARY</div>
                 <div className="parley-ws-item">
-                  <span>Profiles</span>
+                  <span>faster-whisper</span>
                 </div>
                 <div className="parley-ws-item">
-                  <span>Integrations</span>
+                  <span>Conv-TasNet</span>
                 </div>
               </div>
 
@@ -388,8 +488,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 </div>
 
                 <div className="parley-window-intent">
-                  <span>Intent · </span>
-                  <strong>{currentWorkflow.tag} · 4 steps</strong>
+                  <span>Pipeline Stage · </span>
+                  <strong>{currentWorkflow.tag}</strong>
                 </div>
 
                 {/* Step List */}
@@ -418,7 +518,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     Open in Studio
                   </button>
                   <button onClick={() => onNavigate('routing')} className="mini-action-btn secondary">
-                    Tune Lambda
+                    Tune Cost Weight (λ)
                   </button>
                 </div>
               </div>
@@ -427,10 +527,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
         </div>
       </section>
 
-      {/* 5. INTEGRATIONS SECTION */}
+      {/* 5. INTEGRATIONS SECTION WITH AUTHENTIC RESTRAINED SVG ICONS */}
       <section id="integrations" className="parley-section">
         <div className="parley-section-header parley-center-header">
-          <span className="parley-eyebrow">Integrations</span>
+          <span className="parley-eyebrow">Integrations &amp; Stack</span>
           <h2 className="parley-section-title">
             Connect your speech pipeline. <br />
             <span className="parley-serif-italic">OverlapWeave meets you there.</span>
@@ -441,97 +541,188 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           </p>
         </div>
 
-        {/* 2 ROWS OF SOFT ROUNDED TILES */}
+        {/* 2 ROWS OF SOFT ROUNDED TILES WITH AUTHENTIC SVGS (NO EMOJIS) */}
         <div className="parley-integrations-wrap">
           <div className="parley-integrations-row">
             <div className="parley-tool-tile" title="PyTorch 2.x MPS & CUDA acceleration">
-              <div className="tool-logo-mark pytorch">🔥</div>
-              <span className="tool-name">PyTorch</span>
+              <div className="tool-logo-mark">
+                {/* PyTorch SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EE4C2C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                </svg>
+              </div>
+              <span className="tool-name">PyTorch 2.x</span>
             </div>
+
             <div className="parley-tool-tile" title="faster-whisper int8 inference engine">
-              <div className="tool-logo-mark whisper">🎙️</div>
+              <div className="tool-logo-mark">
+                {/* Audio Waveform SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 10v4M6 6v12M10 3v18M14 8v8M18 5v14M22 10v4" />
+                </svg>
+              </div>
               <span className="tool-name">faster-whisper</span>
             </div>
+
             <div className="parley-tool-tile" title="Torchaudio separation pipelines">
-              <div className="tool-logo-mark torchaudio">🔊</div>
+              <div className="tool-logo-mark">
+                {/* Sound Stream SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" />
+                </svg>
+              </div>
               <span className="tool-name">Torchaudio</span>
             </div>
+
             <div className="parley-tool-tile" title="FastAPI async REST endpoints">
-              <div className="tool-logo-mark fastapi">⚡</div>
+              <div className="tool-logo-mark">
+                {/* FastAPI Zap SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#009688" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg>
+              </div>
               <span className="tool-name">FastAPI</span>
             </div>
+
             <div className="parley-tool-tile" title="Hugging Face models & Hub">
-              <div className="tool-logo-mark huggingface">🤗</div>
+              <div className="tool-logo-mark">
+                {/* Hub Model SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" />
+                </svg>
+              </div>
               <span className="tool-name">Hugging Face</span>
             </div>
+
             <div className="parley-tool-tile" title="Docker reproducible containers">
-              <div className="tool-logo-mark docker">🐳</div>
+              <div className="tool-logo-mark">
+                {/* Docker Container SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="7" width="20" height="14" rx="2" />
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                </svg>
+              </div>
               <span className="tool-name">Docker</span>
             </div>
           </div>
 
           <div className="parley-integrations-row">
             <div className="parley-tool-tile" title="Python 3.11 scientific stack">
-              <div className="tool-logo-mark python">🐍</div>
+              <div className="tool-logo-mark">
+                {/* Python Terminal SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="4 17 10 11 4 5" />
+                  <line x1="12" y1="19" x2="20" y2="19" />
+                </svg>
+              </div>
               <span className="tool-name">Python 3.11</span>
             </div>
+
             <div className="parley-tool-tile" title="Web Audio & PyAV in-memory decoding">
-              <div className="tool-logo-mark webaudio">🎛️</div>
+              <div className="tool-logo-mark">
+                {/* Equalizer Slider SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="4" y1="21" x2="4" y2="14" />
+                  <line x1="4" y1="10" x2="4" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12" y2="3" />
+                  <line x1="20" y1="21" x2="20" y2="16" />
+                  <line x1="20" y1="12" x2="20" y2="3" />
+                  <line x1="1" y1="14" x2="7" y2="14" />
+                  <line x1="9" y1="8" x2="15" y2="8" />
+                  <line x1="17" y1="16" x2="23" y2="16" />
+                </svg>
+              </div>
               <span className="tool-name">Web Audio API</span>
             </div>
+
             <div className="parley-tool-tile" title="Librosa & SciPy signal processing">
-              <div className="tool-logo-mark librosa">📊</div>
+              <div className="tool-logo-mark">
+                {/* Signal Curve SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 12c3-8 6-8 9 0s6 8 9 0" />
+                </svg>
+              </div>
               <span className="tool-name">Librosa / SciPy</span>
             </div>
+
             <div className="parley-tool-tile" title="React 19 & TypeScript frontend">
-              <div className="tool-logo-mark react">⚛️</div>
+              <div className="tool-logo-mark">
+                {/* React Atom SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)" />
+                  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(90 12 12)" />
+                  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(150 12 12)" />
+                  <circle cx="12" cy="12" r="1.5" />
+                </svg>
+              </div>
               <span className="tool-name">React 19</span>
             </div>
+
             <div className="parley-tool-tile" title="WebRTC real-time microphone capture">
-              <div className="tool-logo-mark webrtc">📡</div>
+              <div className="tool-logo-mark">
+                {/* Antenna Broadcast SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4.93 19.07a10 10 0 0 1 0-14.14M7.76 16.24a6 6 0 0 1 0-8.48M12 12h.01" />
+                </svg>
+              </div>
               <span className="tool-name">WebRTC</span>
             </div>
+
             <div className="parley-tool-tile" title="GitHub Actions CI/CD automation">
-              <div className="tool-logo-mark github">🐙</div>
+              <div className="tool-logo-mark">
+                {/* Git Branch SVG */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4B5563" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="6" y1="3" x2="6" y2="15" />
+                  <circle cx="18" cy="6" r="3" />
+                  <circle cx="6" cy="18" r="3" />
+                  <path d="M18 9a9 9 0 0 1-9 9" />
+                </svg>
+              </div>
               <span className="tool-name">GitHub Actions</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 6. RESEARCH BENCHMARKS CALLOUT */}
+      {/* 6. EMPIRICAL RESEARCH BENCHMARKS SECTION */}
       <section className="parley-section parley-section-light">
         <div className="parley-section-header parley-center-header">
-          <span className="parley-eyebrow">Empirical Results</span>
+          <span className="parley-eyebrow">Empirical Evaluation</span>
           <h2 className="parley-section-title">
-            Proven performance on <br />
-            <span className="parley-serif-italic">challenging multi-talker speech</span>
+            Measured accuracy and latency <br />
+            <span className="parley-serif-italic">on overlapping Tamil–English speech</span>
           </h2>
+          <p className="parley-section-lead center">
+            Evaluated on synthetic dual-talker mixtures with ground-truth speaker attribution.
+            Source: <code style={{ fontSize: '0.85em', background: '#eef', padding: '2px 6px', borderRadius: '4px' }}>results/benchmarks.json</code>.
+          </p>
         </div>
 
         <div className="parley-metrics-grid">
           <div className="parley-metric-card">
             <div className="metric-val text-amber-600">27.6%</div>
             <div className="metric-title">Speaker-Attributed WER</div>
-            <div className="metric-desc">Outperforms mixture-only baseline by over 38% relative error reduction on overlapping speech.</div>
+            <div className="metric-desc">Benefit-aware routing improves multi-speaker attribution by resolving acoustic cross-talk intervals.</div>
           </div>
 
           <div className="parley-metric-card">
-            <div className="metric-val text-blue-600">5.8×</div>
-            <div className="metric-title">Latency Speedup</div>
-            <div className="metric-desc">680.2 ms P50 latency compared to 1,914 ms for brute-force Always-Separate pipeline.</div>
+            <div className="metric-val text-blue-600">680 ms</div>
+            <div className="metric-title">P50 Inference Latency</div>
+            <div className="metric-desc">~5.8× faster than Always-Separate (1,914 ms), bypassing separation on clean speech spans.</div>
           </div>
 
           <div className="parley-metric-card">
             <div className="metric-val text-emerald-600">35%</div>
             <div className="metric-title">Separation Invoked</div>
-            <div className="metric-desc">Bypasses Conv-TasNet on 65% of regions, eliminating musical noise and compute waste.</div>
+            <div className="metric-desc">65% of audio frames remain unprocessed by Conv-TasNet, eliminating musical phase distortion.</div>
           </div>
 
           <div className="parley-metric-card">
             <div className="metric-val text-violet-600">0.0%</div>
-            <div className="metric-title">Clean Degradation</div>
-            <div className="metric-desc">Zero accuracy loss on clean, single-speaker segments by preserving the original mixture.</div>
+            <div className="metric-title">Clean Speech Degradation</div>
+            <div className="metric-desc">Preserves unseparated audio path when no overlap clash is detected, avoiding demixing loss.</div>
           </div>
         </div>
 
@@ -543,7 +734,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <span className="parley-btn-icon">
               <ChevronRight size={16} strokeWidth={2.5} />
             </span>
-            <span className="parley-btn-label">View Full Benchmark Table</span>
+            <span className="parley-btn-label">Open Benchmark Lab</span>
           </button>
         </div>
       </section>
@@ -569,7 +760,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <span className="parley-btn-icon">
                   <ChevronRight size={18} strokeWidth={2.5} />
                 </span>
-                <span className="parley-btn-label">Get started free</span>
+                <span className="parley-btn-label">Launch Studio</span>
               </button>
 
               <button

@@ -1,0 +1,82 @@
+[
+  {
+    "tagName": "HTML",
+    "className": "",
+    "rect": {},
+    "bg": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "flex": "0 1 auto"
+  },
+  {
+    "tagName": "BODY",
+    "className": "",
+    "rect": {},
+    "bg": "rgb(247, 247, 244)",
+    "borderRadius": "0px",
+    "flex": "0 1 auto"
+  },
+  {
+    "tagName": "DIV",
+    "className": "",
+    "rect": {},
+    "bg": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "flex": "0 1 auto"
+  },
+  {
+    "tagName": "DIV",
+    "className": "framer-UX8VR framer-16g2j74",
+    "rect": {},
+    "bg": "rgb(247, 247, 244)",
+    "borderRadius": "0px",
+    "flex": "0 1 auto"
+  },
+  {
+    "tagName": "DIV",
+    "className": "framer-5ftsf framer-rjYx0 framer-9VcW8 framer-QO94J framer-J5Gyc framer-6DiIC framer-72rtr7",
+    "rect": {},
+    "bg": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "flex": "0 1 auto"
+  },
+  {
+    "tagName": "DIV",
+    "className": "framer-iszz3y",
+    "rect": {},
+    "bg": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "flex": "0 0 auto"
+  },
+  {
+    "tagName": "DIV",
+    "className": "framer-MQ6U2 framer-16xzbai framer-v-16xzbai",
+    "rect": {},
+    "bg": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "flex": "0 1 auto"
+  },
+  {
+    "tagName": "DIV",
+    "className": "framer-Pui5S framer-iDXFn framer-oeV5k framer-r0LHh framer-prZS1 framer-J5Gyc framer-8TkRI framer-1SIIX framer-9VcW8 framer-AaG74 framer-at4MB framer-JxwSF framer-rNr9C framer-z6k7fc framer-v-z6k7fc",
+    "rect": {},
+    "bg": "rgb(238, 237, 230)",
+    "borderRadius": "12px",
+    "flex": "0 1 auto"
+  },
+  {
+    "tagName": "DIV",
+    "className": "framer-Pui5S framer-iDXFn framer-oeV5k framer-r0LHh framer-prZS1 framer-J5Gyc framer-8TkRI framer-1SIIX framer-9VcW8 framer-AaG74 framer-at4MB framer-JxwSF framer-rNr9C framer-z6k7fc framer-v-z6k7fc",
+    "rect": {},
+    "bg": "rgb(238, 237, 230)",
+    "borderRadius": "12px",
+    "flex": "0 1 auto"
+  },
+  {
+    "tagName": "DIV",
+    "className": "framer-Pui5S framer-iDXFn framer-oeV5k framer-r0LHh framer-prZS1 framer-J5Gyc framer-8TkRI framer-1SIIX framer-9VcW8 framer-AaG74 framer-at4MB framer-JxwSF framer-rNr9C framer-z6k7fc framer-v-z6k7fc",
+    "rect": {},
+    "bg": "rgb(238, 237, 230)",
+    "borderRadius": "12px",
+    "flex": "0 1 auto"
+  }
+]

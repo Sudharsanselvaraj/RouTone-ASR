@@ -1,6 +1,6 @@
 /* ==========================================================================
-   OverlapWeave — Framer Parley Landing Page Styles
-   Light-theme editorial design inspired by parley.framer.ai
+   OverlapWeave — Framer Parley Landing Page Styles (Refined Pass)
+   Light-theme editorial design strictly aligned with parley.framer.ai
    ========================================================================== */
 
 :root {
@@ -11,7 +11,8 @@
   --parley-dark: #18181b;
   --parley-dark-hover: #27272a;
   --parley-bg: #fafaf8;
-  --parley-surface: #ffffff;
+  --parley-card-inactive: #eeede6;
+  --parley-card-active: #ffffff;
   --parley-border: #e8e8e4;
   --parley-border-subtle: #f2f2ee;
   --parley-text-primary: #18181b;
@@ -44,7 +45,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(250, 250, 248, 0.88);
+  background: rgba(250, 250, 248, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--parley-border-subtle);
@@ -52,7 +53,7 @@
 }
 
 .parley-nav-container {
-  max-width: 1240px;
+  max-width: 1260px;
   margin: 0 auto;
   padding: 16px 28px;
   display: flex;
@@ -188,7 +189,7 @@
    2. HERO SECTION
    ========================================================================== */
 .parley-hero-section {
-  max-width: 1240px;
+  max-width: 1260px;
   margin: 16px auto 0;
   padding: 0 24px;
 }
@@ -201,18 +202,18 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 540px;
+  min-height: 640px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 32px;
+  padding: 96px 36px;
   box-shadow: 0 20px 40px -15px rgba(224, 122, 30, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .parley-hero-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.35) 100%);
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.35) 100%);
   pointer-events: none;
 }
 
@@ -220,7 +221,7 @@
   position: relative;
   z-index: 2;
   text-align: center;
-  max-width: 820px;
+  max-width: 840px;
   margin: 0 auto;
 }
 
@@ -237,7 +238,8 @@
   font-size: 12.5px;
   font-weight: 500;
   margin-bottom: 24px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .parley-hero-badge-dot {
@@ -249,23 +251,23 @@
 }
 
 .parley-hero-title {
-  font-size: clamp(34px, 5.5vw, 62px);
-  line-height: 1.1;
+  font-size: clamp(36px, 5.2vw, 62px);
+  line-height: 1.12;
   font-weight: 600;
   color: #ffffff;
   letter-spacing: -0.035em;
-  margin-bottom: 20px;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  margin-bottom: 22px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.28);
 }
 
 .parley-hero-subtitle {
   font-size: clamp(15px, 1.8vw, 17.5px);
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.92);
-  max-width: 680px;
+  color: rgba(255, 255, 255, 0.94);
+  max-width: 700px;
   margin: 0 auto 36px;
   font-weight: 400;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.22);
 }
 
 .parley-hero-cta-group {
@@ -278,7 +280,7 @@
 
 /* Trusted By Bar */
 .parley-partners-bar {
-  margin-top: 48px;
+  margin-top: 52px;
   text-align: center;
 }
 
@@ -287,7 +289,7 @@
   font-weight: 500;
   color: var(--parley-text-muted);
   letter-spacing: 0.02em;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .parley-partners-grid {
@@ -314,7 +316,7 @@
    3. SECTIONS COMMON
    ========================================================================== */
 .parley-section {
-  max-width: 1240px;
+  max-width: 1260px;
   margin: 110px auto 0;
   padding: 0 24px;
 }
@@ -361,7 +363,7 @@
   font-size: 15px;
   line-height: 1.65;
   color: var(--parley-text-secondary);
-  max-width: 480px;
+  max-width: 490px;
 }
 
 .parley-section-lead.center {
@@ -371,173 +373,304 @@
 }
 
 /* ==========================================================================
-   4. WHY WEAVE CARDS GRID (01, 02, 03, 04)
+   4. EXPANDABLE FEATURE CARDS (01, 02, 03, 04) MATCHING PARLEY FRAMER
    ========================================================================== */
-.parley-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+.parley-cards-flex-row {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 100%;
+  align-items: flex-start;
+  min-height: 444px;
 }
 
-.parley-card {
-  background: var(--parley-surface);
-  border: 1px solid var(--parley-border);
+.parley-flex-card {
+  outline: none;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: flex 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.3s ease,
+              border-radius 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* INACTIVE CARD: Warm muted beige surface, flex 1, height 420px */
+.parley-flex-card.is-inactive {
+  flex: 1 0 0px;
+  height: 420px;
+  background-color: var(--parley-card-inactive);
+  border-radius: 14px;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+.parley-flex-card.is-inactive:hover {
+  background-color: #e8e6de;
+}
+
+/* ACTIVE CARD: Clean pure white, flex 1.25, height 440px, elevated shadow */
+.parley-flex-card.is-active {
+  flex: 1.25 0 0px;
+  height: 440px;
+  background-color: var(--parley-card-active);
   border-radius: 20px;
-  padding: 24px;
+  border: 1px solid var(--parley-border-subtle);
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* Inactive Card Inner Layout */
+.card-inactive-inner {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 360px;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 100%;
+  padding: 26px 22px;
+  user-select: none;
 }
 
-.parley-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.06);
-  border-color: #d4d4ce;
-}
-
-.parley-card-highlight {
-  background: #ffffff;
-  border-color: #e2e2dc;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-}
-
-.parley-card-preview-box {
-  background: #f6f6f4;
-  border-radius: 14px;
-  padding: 16px;
-  min-height: 130px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.parley-chat-bubble {
-  background: #ffffff;
-  border: 1px solid var(--parley-border);
-  border-radius: 12px;
-  padding: 12px 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+.card-inactive-top {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-}
-
-.parley-bubble-icon {
-  background: var(--parley-orange-light);
-  border-radius: 6px;
-  padding: 4px;
-  display: flex;
-}
-
-.parley-bubble-text {
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--parley-text-secondary);
-}
-
-.bubble-time {
-  font-family: monospace;
-  color: var(--parley-orange);
-  font-weight: 600;
-}
-
-.parley-card-graphic {
-  position: relative;
-  min-height: 130px;
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
 }
 
-.parley-card-watermark {
-  font-size: 38px;
+.card-inactive-watermark {
+  font-size: 34px;
   font-weight: 700;
-  color: #e4e4df;
-  letter-spacing: -0.04em;
+  color: #dedbd0;
+  letter-spacing: -0.03em;
   line-height: 1;
 }
 
-/* Geometric Artwork in Cards */
-.parley-blocks-art {
+/* Orange Geometric Motifs in Inactive Cards */
+.inactive-motif {
+  margin-top: 2px;
+}
+
+.motif-grid-2x2 {
   display: grid;
-  grid-template-columns: repeat(3, 16px);
-  grid-gap: 8px;
-  align-self: flex-end;
-  margin-right: 12px;
+  grid-template-columns: repeat(2, 14px);
+  gap: 6px;
 }
 
-.parley-blocks-art .block {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  background: #f59e0b;
-}
-
-.block.b-1 { opacity: 0.25; }
-.block.b-2 { opacity: 0.5; }
-.block.b-3 { opacity: 0.85; }
-.block.b-4 { opacity: 0.9; }
-.block.b-5 { opacity: 0.4; }
-.block.b-6 { opacity: 0.7; }
-
-.parley-nodes-art {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  align-self: flex-end;
-  margin-right: 12px;
-}
-
-.parley-nodes-art .node {
+.motif-grid-2x2 .sq {
   width: 14px;
   height: 14px;
+  border-radius: 3px;
+  background: var(--parley-orange);
+}
+.motif-grid-2x2 .s1 { opacity: 0.35; }
+.motif-grid-2x2 .s2 { opacity: 0.7; }
+.motif-grid-2x2 .s3 { opacity: 0.95; }
+.motif-grid-2x2 .s4 { opacity: 0.55; }
+
+.motif-grid-3x2 {
+  display: grid;
+  grid-template-columns: repeat(3, 14px);
+  gap: 6px;
+}
+
+.motif-grid-3x2 .sq {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: #f59e0b;
+}
+.motif-grid-3x2 .s1 { opacity: 0.25; }
+.motif-grid-3x2 .s2 { opacity: 0.5; }
+.motif-grid-3x2 .s3 { opacity: 0.85; }
+.motif-grid-3x2 .s4 { opacity: 0.95; }
+.motif-grid-3x2 .s5 { opacity: 0.4; }
+.motif-grid-3x2 .s6 { opacity: 0.7; }
+
+.motif-row-5 {
+  display: flex;
+  gap: 7px;
+}
+
+.motif-row-5 .dot {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--parley-orange);
 }
+.motif-row-5 .d1 { opacity: 0.3; }
+.motif-row-5 .d2 { opacity: 0.55; }
+.motif-row-5 .d3 { opacity: 0.9; }
+.motif-row-5 .d4 { opacity: 0.7; }
+.motif-row-5 .d5 { opacity: 0.45; }
 
-.node.n-1 { opacity: 0.3; }
-.node.n-2 { opacity: 0.6; }
-.node.n-3 { opacity: 0.95; }
-.node.n-4 { opacity: 0.5; }
-.node.n-5 { opacity: 0.8; }
-
-.parley-scatter-art {
+.motif-scatter-6 {
   display: grid;
-  grid-template-columns: repeat(3, 14px);
-  gap: 12px;
-  align-self: flex-end;
-  margin-right: 12px;
+  grid-template-columns: repeat(3, 13px);
+  gap: 8px;
 }
 
-.parley-scatter-art .dot {
-  width: 12px;
-  height: 12px;
+.motif-scatter-6 .sq {
+  width: 13px;
+  height: 13px;
   border-radius: 3px;
   background: #ea580c;
 }
+.motif-scatter-6 .s1 { opacity: 0.4; }
+.motif-scatter-6 .s2 { opacity: 0.9; }
+.motif-scatter-6 .s3 { opacity: 0.25; }
+.motif-scatter-6 .s4 { opacity: 0.75; }
+.motif-scatter-6 .s5 { opacity: 0.5; }
+.motif-scatter-6 .s6 { opacity: 0.85; }
 
-.dot.d-1 { opacity: 0.4; }
-.dot.d-2 { opacity: 0.9; }
-.dot.d-3 { opacity: 0.2; }
-.dot.d-4 { opacity: 0.7; }
-.dot.d-5 { opacity: 0.5; }
-.dot.d-6 { opacity: 0.85; }
-
-.parley-card-body {
-  margin-top: 24px;
+.card-inactive-bottom {
+  margin-top: auto;
 }
 
-.parley-card-title {
+.card-inactive-title {
   font-size: 18px;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
   color: var(--parley-text-primary);
   margin-bottom: 8px;
 }
 
-.parley-card-desc {
+.card-inactive-desc {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--parley-text-secondary);
+}
+
+/* Active Card Inner Layout with Dedicated Upper Preview */
+.card-active-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 24px;
+}
+
+.card-active-preview {
+  background: #f7f7f4;
+  border: 1px solid #e8e8e2;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.preview-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.preview-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--parley-orange);
+}
+
+.preview-badge {
+  font-size: 11px;
+  font-weight: 600;
+  background: #fef3c7;
+  color: #b45309;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  border: 1px solid #fde68a;
+}
+
+.preview-headline {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--parley-text-primary);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.preview-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.preview-metric-item {
+  background: #ffffff;
+  border: 1px solid var(--parley-border);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.metric-lbl {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--parley-text-muted);
+  margin-bottom: 2px;
+}
+
+.metric-num {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--parley-text-primary);
+  font-family: monospace;
+}
+
+.preview-snippet-box {
+  background: #ffffff;
+  border: 1px solid var(--parley-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: monospace;
+  font-size: 11.5px;
+  color: #374151;
+}
+
+.snippet-icon {
+  color: var(--parley-orange);
+  font-weight: 700;
+}
+
+.snippet-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-active-body {
+  margin-top: 14px;
+}
+
+.card-active-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.card-active-num {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--parley-orange);
+}
+
+.card-active-title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--parley-text-primary);
+}
+
+.card-active-desc {
   font-size: 13.5px;
   line-height: 1.6;
   color: var(--parley-text-secondary);
@@ -572,7 +705,7 @@
 }
 
 .parley-workflow-tab-item.active {
-  background: var(--parley-surface);
+  background: var(--parley-card-active);
   border-color: var(--parley-border);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
 }
@@ -886,7 +1019,7 @@
 }
 
 /* ==========================================================================
-   6. INTEGRATIONS SECTION
+   6. INTEGRATIONS SECTION WITH RESTRAINED LOGOS
    ========================================================================== */
 .parley-integrations-wrap {
   display: flex;
@@ -904,14 +1037,14 @@
 }
 
 .parley-tool-tile {
-  background: var(--parley-surface);
+  background: var(--parley-card-active);
   border: 1px solid var(--parley-border);
   border-radius: 16px;
-  padding: 16px 20px;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 160px;
+  min-width: 165px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
@@ -930,8 +1063,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
   background: #f7f7f4;
+  border: 1px solid #ededeb;
 }
 
 .tool-name {
@@ -951,7 +1084,7 @@
 }
 
 .parley-metric-card {
-  background: var(--parley-surface);
+  background: var(--parley-card-active);
   border: 1px solid var(--parley-border);
   border-radius: 20px;
   padding: 28px 24px;
@@ -995,7 +1128,7 @@
    8. BOTTOM BANNER CARD
    ========================================================================== */
 .parley-banner-section {
-  max-width: 1240px;
+  max-width: 1260px;
   margin: 110px auto 0;
   padding: 0 24px;
 }
@@ -1082,7 +1215,7 @@
 }
 
 .parley-footer-container {
-  max-width: 1240px;
+  max-width: 1260px;
   margin: 0 auto;
 }
 
@@ -1223,8 +1356,15 @@
 
 /* Responsive Breakpoints */
 @media (max-width: 1024px) {
-  .parley-cards-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .parley-cards-flex-row {
+    flex-direction: column;
+  }
+  .parley-flex-card.is-inactive,
+  .parley-flex-card.is-active {
+    width: 100%;
+    height: auto;
+    min-height: 280px;
+    flex: none;
   }
   .parley-metrics-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1244,9 +1384,6 @@
 @media (max-width: 768px) {
   .parley-nav-links {
     display: none;
-  }
-  .parley-cards-grid {
-    grid-template-columns: 1fr;
   }
   .parley-metrics-grid {
     grid-template-columns: 1fr;

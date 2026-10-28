@@ -1,0 +1,52 @@
+{
+  "reference_url": "https://parley.framer.ai/",
+  "viewport": { "width": 1536, "height": 900, "deviceScaleFactor": 2 },
+  "motion_observations": [
+    {
+      "component": "Feature Cards (Why Parley)",
+      "trigger": "pointerenter / hover or click on card",
+      "inactive_state": {
+        "flex": "1 0 0px",
+        "width_px": 284,
+        "height_px": 420,
+        "background": "rgb(238, 237, 230)",
+        "borderRadius": "12px",
+        "boxShadow": "none",
+        "visual_elements": "Large watermark number (01., 02., 03., 04.) at top-left, geometric square motif at top-right, title & concise copy near bottom"
+      },
+      "active_state": {
+        "flex": "1.239 (or 0 0 auto ~352px)",
+        "width_px": 352,
+        "height_px": 440,
+        "background": "rgb(255, 255, 255)",
+        "borderRadius": "20px",
+        "boxShadow": "0px 12px 16px 0px rgba(235, 232, 228, 0.8)",
+        "visual_elements": "Dedicated upper preview illustration/interface box (~half height), title and expanded copy below"
+      },
+      "transition_parameters": {
+        "duration_ms": 380,
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "properties_animated": ["flex", "width", "height", "background-color", "border-radius", "box-shadow"]
+      }
+    },
+    {
+      "component": "Capability Selector (Tell Parley once / Intelligent Delegation)",
+      "trigger": "click on list item",
+      "behavior": "Orange double-chevron indicator (>>) marks active item; item expands with explanation; right mockup updates instantly to show the active stage with stepper and terminal detail",
+      "transition_parameters": {
+        "duration_ms": 250,
+        "easing": "ease"
+      }
+    },
+    {
+      "component": "Navigation CTA & Hero Buttons",
+      "trigger": "hover",
+      "behavior": "Dark button background shifts slightly lighter, left orange chevron container moves 2px to the right",
+      "transition_parameters": {
+        "duration_ms": 180,
+        "easing": "ease-out"
+      }
+    }
+  ]
+}
+
