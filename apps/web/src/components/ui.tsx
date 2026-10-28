@@ -1,12 +1,13 @@
 import { useEffect, useId, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { Info, X } from 'lucide-react';
+import { asset } from '../lib/assets';
 import { DECISION_LABEL, DECISION_SHORT } from '../lib/analysis';
 import type { RoutingMode } from '../types';
 
 /* Brand mark: the Routone overlapping-waveform logo (transparent PNG, 2:1). */
 export function WordmarkMark({ size = 22 }: { size?: number }) {
-  return <img src="/brand/routone-mark.png" alt="" aria-hidden="true" height={size} width={Math.round(size * 1.98)} className="wordmark-mark" />;
+  return <img src={asset('brand/routone-mark.png')} alt="" aria-hidden="true" height={size} width={Math.round(size * 1.98)} className="wordmark-mark" />;
 }
 
 export function Wordmark({ size = 22 }: { size?: number }) {
