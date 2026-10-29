@@ -43,14 +43,11 @@ Every value in the UI is labelled as *measured*, *estimate*, *heuristic* or *fix
 
 ## Deploy
 
-| Part | Where | How |
-|---|---|---|
-| Interface | GitHub Pages | Automatic on push to `apps/web` (`.github/workflows/pages.yml`) |
-| API | Render (Docker) | Render, New > Blueprint, pick this repo (`render.yaml`, plan `standard`, 2 GB RAM) |
+The interface is published to GitHub Pages automatically on every push to `apps/web` (`.github/workflows/pages.yml`).
 
-After Render gives you the service URL, set it in the repo: **Settings > Secrets and variables > Actions > Variables > `API_BASE`** (for example `https://routone-api.onrender.com`), then re-run the Pages workflow. Without `API_BASE`, the hosted page falls back to `localhost:8000` (Chrome, Edge and Firefox allow that for a locally running `make server`).
+GitHub Pages serves static files only, so the Python backend is not hosted. Run `make server` on your machine and the live page connects to `http://localhost:8000` (Chrome, Edge and Firefox allow that). To point the page at a different API, set **Settings > Secrets and variables > Actions > Variables > `API_BASE`** and re-run the Pages workflow. A `Dockerfile` for the API is included for running it in a container.
 
-Notes: saved runs live on the container's disk and reset on redeploy; the real-speech benchmark dataset needs macOS `say`, so a hosted benchmark run falls back to the tone dataset and is reported as invalid.
+Note: the real-speech benchmark dataset needs macOS `say`; elsewhere, including in the Docker image, the benchmark falls back to the tone dataset and is reported as invalid.
 
 ## Quick start
 
