@@ -23,7 +23,12 @@ function niceTicks(max: number, n = 5): number[] {
   const mag = Math.pow(10, Math.floor(Math.log10(raw || 1)));
   const step = [1, 2, 2.5, 5, 10].map((f) => f * mag).find((s) => s >= raw) ?? raw;
   const out: number[] = [];
-  for (let v = 0; v <= max + step * 0.5; v += step) out.push(Number(v.toFixed(6)));
+  // Always end on the first tick at or above `max`, so every plotted value lies inside the axis.
+  for (let k = 0; ; k++) {
+    const v = Number((k * step).toFixed(6));
+    out.push(v);
+    if (v >= max) break;
+  }
   return out;
 }
 
