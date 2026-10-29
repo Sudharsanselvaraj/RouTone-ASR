@@ -41,7 +41,7 @@ jobs:
         working-directory: apps/web
         env:
           VITE_BASE: /${{ github.event.repository.name }}/
-          # Set the repository variable API_BASE to the Render service URL (Settings > Variables > Actions).
+          # Optional: set the repository variable API_BASE to an API address (Settings > Variables > Actions).
           VITE_API_BASE: ${{ vars.API_BASE }}
         run: npm run build
 
